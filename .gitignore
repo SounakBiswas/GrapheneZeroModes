@@ -1,0 +1,5 @@
+*.pbs
+*.dat
+*.o*
+trial*
+./outfiles/*
