@@ -3,3 +3,4 @@
 *.o*
 trial*
 ./outfiles/*
+*debug.c

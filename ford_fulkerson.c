@@ -8,7 +8,6 @@ int ford_fulkerson();
 
 int depth_first_visit(int node){
   int next_node,edge;
-  printf("node=%d \n",node);
   int i;
   int cell;
   color[node]=1;
@@ -87,15 +86,17 @@ void augment_flow(){
   int current,prev,diff,edge;
   current=nsites+1;
   prev=pred[current];
-  edge=3*ncells+prev/2;
+  edge=4*ncells+prev/2;
   flow[edge]+=1;
   current=prev;
   while(current!=nsites){
     prev=pred[current];
-    prev=pred[current];
     diff=abs(prev/2-current/2);
-    //b=current
-    if(current%2){
+    if(prev==nsites){
+      edge=3*ncells+current/2;
+      flow[edge]+=1;
+    }
+    else if(current%2){
       edge=3*prev/2+diff/lx+diff%lx;       
       flow[edge]+=1;
     }
@@ -110,11 +111,11 @@ void augment_flow(){
 
 int ford_fulkerson(){
   int i;
+  int j;
   int max_match=0;
-  while(depth_first()==2){
+  while(depth_first()==2)
     augment_flow();
-    getchar();
-  }
+  
   for(i=3*ncells;i<4*ncells;i++)
     max_match+=flow[i];
   return max_match;
