@@ -19,6 +19,7 @@ Edges are marked as 3*cell+j,j={0,1,2}, with reference being on A sublattice
 
 
 * *********************************** */
+void remove_site(int site);
 void make_lattice(){
   int i,j,k;
   int cell;
@@ -36,6 +37,32 @@ void make_lattice(){
   
   
   }
+  int ifvac[NSITES];
+  for(i=0;i<NSITES;i++)
+    ifvac[i]=0;
+  int num_vacs=nc*ncells;
+  int sitea;
+
+  for(i=0;i<num_vacs;i++){
+    sitea=(rand()/(RAND_MAX+1.0))*ncells*2;
+    if(ifvac[sitea]==0){
+      remove_site(sitea);
+      ifvac[sitea]=1;
+    }
+    else
+      i--;
+  }
+  for(i=0;i<num_vacs;i++){
+    sitea=(rand()/(RAND_MAX+1.0))*ncells*2+1;
+    if(ifvac[sitea]==0){
+      remove_site(sitea);
+      ifvac[sitea]=1;
+    }
+    else
+      i--;
+  }
+
+
 }
 
 void remove_site(int site){

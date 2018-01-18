@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "global.h"
+#include "time.h"
 void initialize(){
   lx=LX;
   ly=LY;
@@ -8,6 +9,8 @@ void initialize(){
   nlinks=NLINKS;
   nedges=NEDGES;
   nsites=NSITES;
+  nc=NC;
+  srand(time(0));
   int i;
   
   //initialize capacity and flow;
