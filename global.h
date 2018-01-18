@@ -1,7 +1,7 @@
 
 
-#define LX 2
-#define LY LX
+#define LX 100
+#define LY 100
 #define NCELLS LX*LY
 #define NEDGES 5*NCELLS
 #define NSITES 2*NCELLS
@@ -9,7 +9,7 @@
 #define nc
 
 int lx,ly,ncells,nsites,nedges,nlinks;
-double nc;
+//double nc;
 int capacity[NEDGES];
 int flow[NEDGES];
 int neigh[2*NCELLS][3];

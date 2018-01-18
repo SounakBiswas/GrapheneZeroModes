@@ -1,12 +1,12 @@
 #include "global.h"
 #include <stdlib.h>
 #include <stdio.h>
-int depth_first_visit(int i);
+void depth_first_visit(int i);
 int depth_first();
 void augment_flow();
 int ford_fulkerson();
 
-int depth_first_visit(int node){
+void depth_first_visit(int node){
   int next_node,edge;
   int i;
   int cell;
@@ -32,7 +32,7 @@ int depth_first_visit(int node){
   }
   else if(node%2==0){
     for(i=0;i<3;i++){
-      cell=node;
+      cell=node/2;
       edge=3*cell+i;
       next_node=neigh[node][i];
       if((capacity[edge]-flow[edge])&&(color[next_node]==0)){
@@ -52,7 +52,7 @@ int depth_first_visit(int node){
       pred[next_node]=node;
     }
     if(color[nsites+1]==2)
-      return 1;
+      return;
     for(i=0;i<3;i++){
       cell=neigh[node][i]/2;
       edge=3*cell+i;
@@ -60,6 +60,7 @@ int depth_first_visit(int node){
       if((flow[edge])&&(color[next_node]==0)){
         depth_first_visit(next_node);
         pred[next_node]=node;
+
       }
       if(color[nsites+1]==2)
         return;
@@ -113,9 +114,14 @@ int ford_fulkerson(){
   int i;
   int j;
   int max_match=0;
-  while(depth_first()==2)
+  while(depth_first()==2){
     augment_flow();
-  
+   max_match=0;
+  for(i=3*ncells;i<4*ncells;i++)
+    max_match+=flow[i];
+  }
+
+  max_match=0;
   for(i=3*ncells;i<4*ncells;i++)
     max_match+=flow[i];
   return max_match;

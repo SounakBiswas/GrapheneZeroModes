@@ -36,8 +36,6 @@ void make_lattice(){
   
   
   }
-  
-
 }
 
 void remove_site(int site){
@@ -54,10 +52,5 @@ void remove_site(int site){
     capacity[3*site/2]=0;
     capacity[3*site/2+1]=0;
     capacity[3*site/2+2]=0;
-  
-  
   }
-
-
-
 }
