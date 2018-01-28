@@ -12,9 +12,9 @@ void dfs();
 void augment(int row){
   int temp;
   aug++;
-   // printf("augment path :");
+  //  printf("augment path :");
   while(s_top>=0){
-   // printf("%d %d ",row,stack[s_top]);
+  //  printf("%d %d ",row,stack[s_top]);
     temp=cmatch[stack[s_top]];
     cmatch[stack[s_top]]=row;
     rmatch[row]=stack[s_top];
@@ -22,7 +22,7 @@ void augment(int row){
     s_top--;
   }
  // printf("\n ");
- // getchar();
+//  getchar();
  // int i;
   //for(i=0;i<ncells;i++)
   //printf("%d rm %d  cm %d \n",i,rmatch[i],cmatch[i]);
@@ -44,7 +44,7 @@ void dfs_phase(int col2,int n_phase){
       if(visited[row]<n_phase)
         break;
     }
-    //printf("%d %d %d %d %d\n",col2,row,visited[row],n_phase,s_top);
+   // printf("%d %d %d %d %d %d\n",col2,col,row,visited[row],n_phase,s_top);
     //getchar();
     if(visited[row]<n_phase){
       visited[row]=n_phase;

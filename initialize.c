@@ -29,9 +29,9 @@ void make_sparse(){
   int sitea,siteb;
 
   for(i=0;i<num_vacs;i++){
-    sitea=(rand()/(RAND_MAX+1.0))*ncells*2;
+    sitea=(int)((rand()/(RAND_MAX+1.0))*ncells)*2;
     if(ifvac[sitea]==0){
-      printf("%d\n",sitea);
+      //printf("%d\n",sitea);
       ifvac[sitea]=1;
       siteb=neigh[sitea][0];
       ifvac[siteb]=-1;
@@ -55,7 +55,7 @@ void make_sparse(){
   for(i=0;i<num_vacs;i++){
     siteb=(int)((rand()/(RAND_MAX+1.0))*ncells)*2+1;
     if(ifvac[siteb]==0){
-      printf("%d\n",siteb);
+      //printf("%d\n",siteb);
       ifvac[siteb]=1;
       sitea=neigh[siteb][0];
       ifvac[sitea]=-1;
