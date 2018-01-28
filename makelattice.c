@@ -41,22 +41,51 @@ void make_lattice(){
   for(i=0;i<NSITES;i++)
     ifvac[i]=0;
   int num_vacs=nc*ncells;
-  int sitea;
+  int sitea,siteb;
 
   for(i=0;i<num_vacs;i++){
-    sitea=(rand()/(RAND_MAX+1.0))*ncells*2;
+    sitea=(int)((rand()/(RAND_MAX+1.0))*ncells)*2;
     if(ifvac[sitea]==0){
-      remove_site(sitea);
       ifvac[sitea]=1;
+      remove_site(sitea);
+      siteb=neigh[sitea][0];
+      ifvac[siteb]=-1;
+      ifvac[neigh[siteb][1]]=-1;
+      ifvac[neigh[siteb][2]]=-1;
+
+      siteb=neigh[sitea][1];
+      ifvac[siteb]=-1;
+      ifvac[neigh[siteb][0]]=-1;
+      ifvac[neigh[siteb][2]]=-1;
+
+      siteb=neigh[sitea][2];
+      ifvac[siteb]=-1;
+      ifvac[neigh[siteb][1]]=-1;
+      ifvac[neigh[siteb][0]]=-1;
+
     }
     else
       i--;
   }
   for(i=0;i<num_vacs;i++){
-    sitea=(rand()/(RAND_MAX+1.0))*ncells*2+1;
-    if(ifvac[sitea]==0){
-      remove_site(sitea);
-      ifvac[sitea]=1;
+    siteb=(int)((rand()/(RAND_MAX+1.0))*ncells)*2+1;
+    if(ifvac[siteb]==0){
+      ifvac[siteb]=1;
+      remove_site(siteb);
+      sitea=neigh[siteb][0];
+      ifvac[sitea]=-1;
+      ifvac[neigh[sitea][1]]=-1;
+      ifvac[neigh[sitea][2]]=-1;
+
+      sitea=neigh[siteb][1];
+      ifvac[sitea]=-1;
+      ifvac[neigh[sitea][0]]=-1;
+      ifvac[neigh[sitea][2]]=-1;
+
+      sitea=neigh[siteb][2];
+      ifvac[sitea]=-1;
+      ifvac[neigh[sitea][1]]=-1;
+      ifvac[neigh[sitea][0]]=-1;
     }
     else
       i--;
@@ -67,6 +96,7 @@ void make_lattice(){
 
 void remove_site(int site){
   int nbr;
+//  printf("%d\n",site);
   if(site%2){
    nbr=neigh[site][0];
    capacity[3*nbr/2]=0;
