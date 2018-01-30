@@ -6,16 +6,17 @@ int *stack;
 int s_top;
 int *visited;
 
+int heur_mdm();
 int dfs_phase();
 int dfs();
-inline void push_stack(int k){
+static inline void push_stack(int k){
   s_top++;
   stack[s_top]=k;
 }
-inline void pop_stack(){
+static inline void pop_stack(){
   s_top--;
 }
-inline void clear_stack(){
+static inline void clear_stack(){
   s_top=-1;
 }
 
@@ -67,6 +68,9 @@ int dfs(){
   int n_phase=0;
   int matching=0;
   clear_stack();
+  //matching=heur_sgm();
+  matching=heur_mdm();
+  printf("heuristic match= %d\n",matching);
   for(col=0;col<ncells;col++){
     if(cmatch[col]==-1)
       matching+=dfs_phase(col,n_phase);
