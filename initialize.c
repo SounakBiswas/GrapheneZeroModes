@@ -11,7 +11,7 @@ void initialize(){
   nedges=NEDGES;
   nsites=NSITES;
   nc=NC;
-  srand(25);
+  srand(22);
   int i,j;
   
   //initialize capacity and flow;
