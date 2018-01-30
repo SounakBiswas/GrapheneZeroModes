@@ -74,6 +74,8 @@ void make_sparse(){
   // Make sparse structures
   rids=(int *)malloc(n_nonzeros*sizeof(int));
   cptrs=(int *)malloc((ncells+1)*sizeof(int));
+  cids=(int *)malloc(n_nonzeros*sizeof(int));
+  rptrs=(int *)malloc((ncells+1)*sizeof(int));
   rmatch=(int*)malloc(ncells*sizeof(int));
   cmatch=(int*)malloc(ncells*sizeof(int));
 
@@ -85,11 +87,12 @@ void make_sparse(){
       rmatch[i]=-2;
   }
 
-  int rid_ctr,c_ctr;
-  rid_ctr=c_ctr=0;
+  int rid_ctr,c_ctr,r_ctr,cid_ctr;
+  rid_ctr=c_ctr=cid_ctr=rid_ctr=0;
   for(i=0;i<ncells;i++){
     cptrs[c_ctr]=rid_ctr;
     c_ctr++;
+    
     if(ifvac[2*i]!=1){
       for(j=0;j<3;j++){
         siteb=neigh[2*i][j];
@@ -99,7 +102,20 @@ void make_sparse(){
         }
       }
     }
+    rptrs[r_ctr]=cid_ctr;
+    r_ctr++;
+    
+    if(ifvac[2*i+1]!=1){
+      for(j=0;j<3;j++){
+        sitea=neigh[2*i+1][j];
+        if(ifvac[sitea]!=1){
+          cids[cid_ctr]=sitea/2;
+          cid_ctr++;
+        }
+      }
+    }
   }
   cptrs[ncells]=n_nonzeros;
+  rptrs[ncells]=n_nonzeros;
 
 }

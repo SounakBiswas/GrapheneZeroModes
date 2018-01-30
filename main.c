@@ -14,5 +14,7 @@ void main(){
   free(cmatch);
   free(rmatch);
   free(rids);
+  free(cids);
   free(cptrs);
+  free(rptrs);
 }
