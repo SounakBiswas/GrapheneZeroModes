@@ -14,6 +14,8 @@ void initialize(){
   srand(25);
   int i,j;
   
+  cdegree=(int*)malloc(ncells*sizeof(int));
+  rdegree=(int*)malloc(ncells*sizeof(int));
   //initialize capacity and flow;
 }
 

@@ -16,5 +16,5 @@ int *rmatch;
 int *cmatch;
 int n_nonzeros;
 int aug;
-int cdegree[NCELLS];
-int rdegree[NCELLS];
+int *cdegree;
+int *rdegree;
