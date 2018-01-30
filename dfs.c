@@ -6,37 +6,34 @@ int *stack;
 int s_top;
 int *visited;
 
-void dfs_phase();
-void dfs();
+int dfs_phase();
+int dfs();
+inline void push_stack(int k){
+  s_top++;
+  stack[s_top]=k;
+}
+inline void pop_stack(){
+  s_top--;
+}
+inline void clear_stack(){
+  s_top=-1;
+}
 
 void augment(int row){
   int temp;
-  aug++;
-  //  printf("augment path :");
   while(s_top>=0){
-  //  printf("%d %d ",row,stack[s_top]);
     temp=cmatch[stack[s_top]];
     cmatch[stack[s_top]]=row;
     rmatch[row]=stack[s_top];
     row=temp;
     s_top--;
   }
- // printf("\n ");
-//  getchar();
- // int i;
-  //for(i=0;i<ncells;i++)
-  //printf("%d rm %d  cm %d \n",i,rmatch[i],cmatch[i]);
-  //getchar();
 }
 
 
-void dfs_phase(int col2,int n_phase){
+int dfs_phase(int col,int n_phase){
   int rctr,row;
-  int col;
-  s_top++;
-  stack[s_top]=col2;
-  assert(cmatch[col2]!=-2);
-
+  push_stack(col);
   while(s_top>=0){
     col=stack[s_top];
     for(rctr=cptrs[col]; rctr<cptrs[col+1]; rctr++){
@@ -44,46 +41,36 @@ void dfs_phase(int col2,int n_phase){
       if(visited[row]<n_phase)
         break;
     }
-   // printf("%d %d %d %d %d %d\n",col2,col,row,visited[row],n_phase,s_top);
-    //getchar();
     if(visited[row]<n_phase){
       visited[row]=n_phase;
       if(rmatch[row]==-1){
-        //printf("augment %d \n",row);
         augment(row);
-        break;
+        return 1; //success
       }
-      else{
-        s_top++;
-        stack[s_top]=rmatch[row];
-      }
+      else
+        push_stack(rmatch[row]);
+      
     }
-    else{
-      s_top--;
-
-    }
+    else
+      pop_stack();
 
   }
+  return 0;  //no augmenting path
 }
 
-void dfs(){
+int dfs(){
   int col,i;
   stack=(int*)malloc(ncells*sizeof(int));
   visited=(int*)malloc(ncells*sizeof(int));
   for(col=0;col<ncells;col++)
     visited[col]=-1;
-
   int n_phase=0;
-
+  int matching=0;
+  clear_stack();
   for(col=0;col<ncells;col++){
-  s_top=-1;
-    //printf("called col=%d \n",col);
-    if(cmatch[col]==-1){
-      dfs_phase(col,n_phase);
-    }
+    if(cmatch[col]==-1)
+      matching+=dfs_phase(col,n_phase);
     n_phase++;
   }
-  //for(i=0;i<ncells;i++)
-  //printf("%d rm %d  cm %d \n",i,rmatch[i],cmatch[i]);
-  //getchar();
+  return matching;
 }
