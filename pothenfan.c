@@ -82,37 +82,51 @@ int pf_dfs(int col,int n_phase){
 
 
 int potfan_phase(int n_phase){
-  int col;
+  int i,k,col,temp;
   int aug=0;
   clear_stack();
-  for(col=0;col<ncells;col++){
-    if(cmatch[col]==-1){ 
-      aug+=pf_dfs(col,n_phase);
+  for(i=0;i<freecol;i++){
+    col=unmatched[i];
+    aug+=pf_dfs(col,n_phase);
+  }
+  k=0;
+  for(i=0;i<freecol;i++){
+    col=unmatched[i];
+    if(cmatch[col]==-1){
+      unmatched[k]=col;
+      k++;
     }
   }
-  //printf("aug in a potfan %d phase= %d\n",n_phase,aug);
-  //getchar();
+  freecol-=aug;
+  //assert(k==freecol);
   return aug;
 }
 
 
 int potfan(){
-  int col,aug;
+  int i,col,aug;
   int n_phase=0;
   int matching=0;
   stack=(int*)malloc(ncells*sizeof(int));
   visited=(int*)malloc(ncells*sizeof(int));
   lookahead=(int*)malloc(ncells*sizeof(int));
 
-  for(col=0;col<ncells;col++){
-    visited[col]=-1;
-    lookahead[col]=0;
-  }
-
   //matching=heur_sgm();
   matching=heur_mdm();
   printf("heuristic match= %d\n",matching);
-
+  
+  freecol=ncells-(int)(nc*ncells)-matching;
+  unmatched=(int*)malloc(freecol*sizeof(int));
+  i=0;
+  for(col=0;col<ncells;col++){
+    visited[col]=-1;
+    lookahead[col]=0;
+    if(cmatch[col]==-1){
+      unmatched[i]=col;
+      i++;
+    }
+  }
+  assert(i==freecol);
   do{
     aug=potfan_phase(n_phase);
     matching+=aug;  

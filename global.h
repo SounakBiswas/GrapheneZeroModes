@@ -1,5 +1,5 @@
-#define LX 100
-#define LY 100
+#define LX 1000
+#define LY 1000
 #define NCELLS LX*LY
 #define NEDGES 5*NCELLS
 #define NSITES 2*NCELLS
@@ -18,3 +18,5 @@ int n_nonzeros;
 int aug;
 int *cdegree;
 int *rdegree;
+int *unmatched;
+int freecol;
