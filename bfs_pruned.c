@@ -13,9 +13,11 @@ int bfs();
 inline void enqueue(int k){
   queue[tail]=k;
   tail=(tail!=0)?tail-1:ncells-1;
+  queue_len++;
 }
 inline void dequeue(){
   head=(head!=0)?head-1:ncells-1;
+  queue_len--;
 }
 inline void clear_queue(){
   head=tail=ncells-1;
