@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include"global.h"
+#include<assert.h>
 
 int *stack;
 int *queue;
@@ -16,7 +17,7 @@ int queue_len;
 inline void push_stack(int k){
   s_top++;
   stack[s_top]=k;
-  lastrow[k]=cptrs[k];
+  lastrow[k]=cptrs[k]-1;
 }
 inline void pop_stack(){
   s_top--;
@@ -93,27 +94,27 @@ int dfs_phase(int col,int n_phase){
   int rctr,row,level;
   level=-1;
   push_stack(col);
-  int done;
+  int path_exists;
   while(s_top>=0){
     col=stack[s_top];
     level=(cmatch[col]!=-1)?levels[cmatch[col]]:-1;
-    for(rctr=cptrs[col]; rctr<cptrs[col+1]; rctr++){
-    //while(lastrow[col]<cptrs[col+1]){
-      //row=rids[lastrow[col]];
+    path_exists=0;
+    for(rctr=lastrow[col]+1; rctr<cptrs[col+1]; rctr++){
       row=rids[rctr];
-      lastrow[col]++;
-      if((visited[row]<n_phase)&&(levels[row]==level+1))
+      lastrow[col]=rctr;
+      if((visited[row]<n_phase)&&(levels[row]==level+1)){
+        path_exists=1;
         break;
+      }
     }
-    if((visited[row]<n_phase)&&(levels[row]==level+1)){
+    if(path_exists){
       visited[row]=n_phase;
       if(rmatch[row]==-1){
         augment(row);
         return 1; //success
       }
-      else{
+      else
         push_stack(rmatch[row]);
-      }
     }
     else
       pop_stack();
@@ -143,8 +144,6 @@ int hkmm(){
       if(cmatch[col]==-1)
         matching+=dfs_phase(col,n_phase);
     }
-    //printf("%d \n",matching);
-   //getchar();
     n_phase++;
   }
   free(queue);
