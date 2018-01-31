@@ -62,30 +62,34 @@ int bfs_combined(int n_phase){
   int temp_tail;
   clear_queue();
   clear_stack();
-  for(col=0;col<ncells;col++){
+  for(col=0;col<2*ncells;col++)
       levels[col]=-1;
+  for(col=0;col<ncells;col++){
     //printf("%d %d\n",col,cmatch[col]);
     if(cmatch[col]==-1){
       enqueue(col);
+      levels[2*col]=0;
     }
   }
   level=0;
   printf("hte %d %d %d\n",head,tail,queue_len);
   while(!empty_queue()){
     col=queue[head];
-    //printf("%d \n",col);
     dequeue();
-    level=(cmatch[col]!=-1)?levels[cmatch[col]]:-1;
+    level=(cmatch[col]!=-1)?(levels[2*cmatch[col]+1]+1):0;
+    //printf("level=%d\n",level);
+    levels[2*col]=level;
+    //printf("levelcol=%d\n",levels[col]);
     for(rctr=cptrs[col]; rctr<cptrs[col+1]; rctr++){
       row=rids[rctr];
       if(visited[row]<n_phase){
         visited[row]=n_phase;
-        levels[row]=level+1;
-        printf("col row levels  %d %d %d %d\n",col, row,levels[row],rmatch[row]);
+        levels[2*row+1]=levels[2*col]+1;
+       //printf("col row levels  %d %d %d %d %d %d\n",col, row,level,levels[col],levels[row],rmatch[row]);
         if(rmatch[row]==-1)
           bfs_succ=1;
-        else if(!bfs_succ)
-        //else 
+        //else if(!bfs_succ)
+        else 
           enqueue(rmatch[row]);
       }
     }
@@ -97,21 +101,22 @@ int bfs_combined(int n_phase){
 
 int dfs_phase(int col,int n_phase){
   int rctr,row,level;
-  level=-1;
+  //level=-1;
   push_stack(col);
   //printf("col %d\n",col);
   //getchar();
   while(s_top>=0){
     col=stack[s_top];
-    level=(cmatch[col]!=-1)?levels[cmatch[col]]:-1;
+    //level=(cmatch[col]!=-1)?levels[cmatch[col]]:-1;
+    level=levels[2*col];
     for(rctr=lastrow[col]+1; rctr<cptrs[col+1]; rctr++){
       row=rids[rctr];
       if((visited[row]<n_phase))
         break;
     }
     lastrow[col]=rctr;
-    if((visited[row]<n_phase)&&(levels[row]==level+1)){
-    //if((visited[row]<n_phase)&&(1)){
+    if((visited[row]<n_phase)&&(abs(levels[2*row+1]-(levels[2*col])==1) )){
+    //if((visited[row]<n_phase)&&(1 )){
       visited[row]=n_phase;
       if(rmatch[row]==-1){
         augment(row);
@@ -134,7 +139,7 @@ int hkmm(){
   stack=(int*)malloc(ncells*sizeof(int));
   visited=(int*)malloc(ncells*sizeof(int));
   parent=(int*)malloc(ncells*sizeof(int));
-  levels=(int*)malloc(ncells*sizeof(int));
+  levels=(int*)malloc(2*ncells*sizeof(int));
   lastrow=(int*)malloc(ncells*sizeof(int));
   int matching=0;
   int temp;
@@ -145,11 +150,9 @@ int hkmm(){
   int n_phase=0;
   while(bfs_combined(n_phase)){
     n_phase++;
-    for(col=0;col<ncells;col++){
-      clear_stack();
+    for(col=0;col<ncells;col++)
       if(cmatch[col]==-1)
         matching+=dfs_phase(col,n_phase);
-    }
     printf("%d \n",matching);
     getchar();
     n_phase++;
