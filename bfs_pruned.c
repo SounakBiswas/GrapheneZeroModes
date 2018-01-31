@@ -6,22 +6,23 @@ int *queue;
 int head,tail;
 int *visited;
 int *parent;
+int queue_len;
 
 int bfs_phase();
 int bfs();
-static inline void enqueue(int k){
-  tail=(tail!=0)?tail-1:ncells-1;
+inline void enqueue(int k){
   queue[tail]=k;
+  tail=(tail!=0)?tail-1:ncells-1;
 }
-static inline void dequeue(){
+inline void dequeue(){
   head=(head!=0)?head-1:ncells-1;
 }
-static inline void clear_queue(){
-  head=ncells-1;
-  tail=0;
+inline void clear_queue(){
+  head=tail=ncells-1;
+  queue_len=0;
 }
-static inline int empty_queue(){
-  return (tail!=0)?(head==tail-1):(head==ncells-1);
+inline int empty_queue(){
+  return (queue_len==0);
 
 }
 static inline void prune(int init_head){
