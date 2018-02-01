@@ -1,5 +1,4 @@
-//Hopcroft Karp  (Karpinsky-Rytter ?? )(Mahajan)
-//Uses Forward dfs, dfs only on shortest path.
+//Hopcroft Karp Mahajan (Karpinsky-Rytter ?? )
 #include<stdlib.h>
 #include<stdio.h>
 #include"global.h"
@@ -79,8 +78,10 @@ int bfs_combined(int n_phase){
       if(visited[row]<n_phase){
         visited[row]=n_phase;
         levels[row]=level+1;
-        if(rmatch[row]==-1)
+        if(rmatch[row]==-1){
           bfs_succ=1;
+          max_level=levels[row];
+        }
         else if(!bfs_succ) 
           enqueue(rmatch[row]);
       }
@@ -101,6 +102,35 @@ int dfs_phase(int col,int n_phase){
       row=rids[rctr];
       lastrow[col]=rctr;
       if((visited[row]<n_phase)&&(levels[row]==level+1)){
+        path_exists=1;
+        break;
+      }
+    }
+    if(path_exists){
+      visited[row]=n_phase;
+      if((rmatch[row]==-1)&&(levels[row]==max_level)){
+        augment(row);
+        return 1; //success
+      }
+      else
+        push_stack(rmatch[row]);
+    }
+    else
+      pop_stack();
+  }
+  return 0;  //no augmenting path
+}
+int dfs_phase2(int col,int n_phase){
+  int rctr,row,level;
+  push_stack(col);
+  int path_exists;
+  while(s_top>=0){
+    col=stack[s_top];
+    path_exists=0;
+    for(rctr=lastrow[col]+1; rctr<cptrs[col+1]; rctr++){
+      row=rids[rctr];
+      lastrow[col]=rctr;
+      if(visited[row]<n_phase){
         path_exists=1;
         break;
       }
@@ -139,6 +169,12 @@ int hkmm(){
       clear_stack();
       if(cmatch[col]==-1)
         matching+=dfs_phase(col,n_phase);
+    }
+    n_phase++;
+    for(col=0;col<ncells;col++){
+      clear_stack();
+      if(cmatch[col]==-1)
+        matching+=dfs_phase2(col,n_phase);
     }
     //printf ( "%d \n",matching );
     n_phase++;

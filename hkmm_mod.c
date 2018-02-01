@@ -1,5 +1,5 @@
-//Hopcroft Karp  (Karpinsky-Rytter ?? )(Mahajan)
-//Uses Forward dfs, dfs only on shortest path.
+//Hopcroft Karp Mahajan (Karpinsky-Rytter ?? )
+//Forwar DFS, 
 #include<stdlib.h>
 #include<stdio.h>
 #include"global.h"
@@ -81,7 +81,7 @@ int bfs_combined(int n_phase){
         levels[row]=level+1;
         if(rmatch[row]==-1)
           bfs_succ=1;
-        else if(!bfs_succ) 
+        else 
           enqueue(rmatch[row]);
       }
     }
@@ -136,7 +136,7 @@ int hkmm(){
   while(bfs_combined(n_phase)){
     n_phase++;
     for(col=0;col<ncells;col++){
-      clear_stack();
+      //clear_stack();
       if(cmatch[col]==-1)
         matching+=dfs_phase(col,n_phase);
     }
