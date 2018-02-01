@@ -11,7 +11,6 @@ int s_top;
 int *visited;
 int *levels;
 int *lastrow;
-int max_level;
 int queue_len;
 
 inline void push_stack(int k){
@@ -78,10 +77,9 @@ int bfs_combined(int n_phase){
       if(visited[row]<n_phase){
         visited[row]=n_phase;
         levels[row]=level+1;
-        if(rmatch[row]==-1){
+        if(rmatch[row]==-1)
           bfs_succ=1;
-          max_level=levels[row];
-        }
+        
         else if(!bfs_succ) 
           enqueue(rmatch[row]);
       }
@@ -108,7 +106,7 @@ int dfs_phase(int col,int n_phase){
     }
     if(path_exists){
       visited[row]=n_phase;
-      if((rmatch[row]==-1)&&(levels[row]==max_level)){
+      if(rmatch[row]==-1){
         augment(row);
         return 1; //success
       }

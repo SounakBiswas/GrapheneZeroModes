@@ -10,11 +10,10 @@ void main(){
   make_lattice();
   make_sparse();
   aug=0;
-  printf("free sites=%d\n",ncells-(int)(nc*ncells)-bfs());
+  //printf("free sites=%d\n",ncells-(int)(nc*ncells)-hkmm());
+  printf("free sites=%d\n",ncells-(int)(nc*ncells)-hkmm());
   free(cmatch);
   free(rmatch);
   free(rids);
-  free(cids);
   free(cptrs);
-  free(rptrs);
 }

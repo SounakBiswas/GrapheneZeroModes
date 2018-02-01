@@ -12,7 +12,6 @@ int s_top;
 int *visited;
 int *levels;
 int *lastrow;
-int max_level;
 int queue_len;
 
 inline void push_stack(int k){

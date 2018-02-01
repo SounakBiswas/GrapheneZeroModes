@@ -101,5 +101,6 @@ void make_sparse(){
     }
   }
   cptrs[ncells]=n_nonzeros;
+  printf("initialized\n");
 
 }
