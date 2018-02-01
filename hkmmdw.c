@@ -12,6 +12,8 @@ int *visited;
 int *levels;
 int *lastrow;
 int queue_len;
+int heur_sgm();
+int heur_mdm();
 
 inline void push_stack(int k){
   s_top++;
@@ -157,6 +159,7 @@ int hkmm(){
   levels=(int*)malloc(ncells*sizeof(int));
   lastrow=(int*)malloc(ncells*sizeof(int));
   int matching=0;
+  matching=heur_mdm();
   for(col=0;col<ncells;col++)
     visited[col]=-1;
 

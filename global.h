@@ -17,4 +17,7 @@ int *rptrs;
 int *rmatch;
 int *cmatch;
 int n_nonzeros;
-int aug;
+int *cdegree;
+int *rdegree;
+int *unmatched;
+int freecol;

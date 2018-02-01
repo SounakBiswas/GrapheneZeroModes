@@ -8,6 +8,8 @@ int *visited;
 int *parent;
 int queue_len;
 
+int heur_sgm();
+int heur_mdm();
 int bfs_phase();
 int bfs();
 inline void enqueue(int k){
@@ -77,6 +79,7 @@ int bfs(){
     visited[col]=-1;
   int n_phase=0;
   int matching=0;
+  matching=heur_mdm();
   clear_queue();
   for(col=0;col<ncells;col++){
     if(cmatch[col]==-1)

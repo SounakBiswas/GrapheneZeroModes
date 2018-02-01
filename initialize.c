@@ -11,8 +11,10 @@ void initialize(){
   nedges=NEDGES;
   nsites=NSITES;
   nc=NC;
-  srand(22);
+  srand(32);
   int i,j;
+  cdegree=(int*)malloc(ncells*sizeof(int));
+  rdegree=(int*)malloc(ncells*sizeof(int));
 }
 
 void make_sparse(){
@@ -24,22 +26,32 @@ void make_sparse(){
   n_nonzeros=3*ncells-6*num_vacs;
   int sitea,siteb;
 
+  for(i=0;i<ncells;i++){
+    cdegree[i]=3;
+    rdegree[i]=3;
+  }
+
   for(i=0;i<num_vacs;i++){
     sitea=(int)((rand()/(RAND_MAX+1.0))*ncells)*2;
     if(ifvac[sitea]==0){
       //printf("%d\n",sitea);
       ifvac[sitea]=1;
+      cdegree[sitea/2]=0;
+
       siteb=neigh[sitea][0];
+      rdegree[siteb/2]--;
       ifvac[siteb]=-1;
       ifvac[neigh[siteb][1]]=-1;
       ifvac[neigh[siteb][2]]=-1;
 
       siteb=neigh[sitea][1];
+      rdegree[siteb/2]--;
       ifvac[siteb]=-1;
       ifvac[neigh[siteb][0]]=-1;
       ifvac[neigh[siteb][2]]=-1;
 
       siteb=neigh[sitea][2];
+      rdegree[siteb/2]--;
       ifvac[siteb]=-1;
       ifvac[neigh[siteb][1]]=-1;
       ifvac[neigh[siteb][0]]=-1;
@@ -53,17 +65,22 @@ void make_sparse(){
     if(ifvac[siteb]==0){
       //printf("%d\n",siteb);
       ifvac[siteb]=1;
+      rdegree[siteb/2]=0;
+      
       sitea=neigh[siteb][0];
+      cdegree[sitea/2]--;
       ifvac[sitea]=-1;
       ifvac[neigh[sitea][1]]=-1;
       ifvac[neigh[sitea][2]]=-1;
 
       sitea=neigh[siteb][1];
+      cdegree[sitea/2]--;
       ifvac[sitea]=-1;
       ifvac[neigh[sitea][0]]=-1;
       ifvac[neigh[sitea][2]]=-1;
 
       sitea=neigh[siteb][2];
+      cdegree[sitea/2]--;
       ifvac[sitea]=-1;
       ifvac[neigh[sitea][1]]=-1;
       ifvac[neigh[sitea][0]]=-1;
