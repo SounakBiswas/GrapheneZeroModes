@@ -11,10 +11,10 @@ int hkmm();
 void write_vacancies(){
   FILE *fp;
   int i;
-  fp=fopen("vacancies.dat","a");
+  fp=fopen("vacancies.dat","w");
   for(i=0;i<2*ncells;i++)
-    if(ifvac[i])
-    fprintf(fp,"%d \n ",i);
+    if(ifvac[i]==1)
+    fprintf(fp,"%d\n",i);
   fclose(fp);
 }
 void write_free(){
@@ -23,11 +23,11 @@ void write_free(){
   fp=fopen("free_sites.dat","a");
   for(i=0;i<ncells;i++){
     if(rmatch[i]==-1)
-      fprintf(fp,"%d \n ",2*i+1);
+      fprintf(fp,"%d\n",2*i+1);
   }
   for(i=0;i<ncells;i++){
     if(cmatch[i]==-1)
-      fprintf(fp,"%d \n ",2*i);
+      fprintf(fp,"%d\n",2*i);
   }
   fclose(fp);
 }

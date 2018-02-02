@@ -88,8 +88,8 @@ void make_sparse(){
     cdegree[i]=3;
     rdegree[i]=3;
   }
-  int posx=0;
-  int posy=0;
+  int posx=5;
+  int posy=5;
   int site;
   site=2*(posx+lx*posy)+1;
   knockb(site);
@@ -104,8 +104,8 @@ void make_sparse(){
   site=2*(next_nbr(posx,posy,2,4))+1;
   knockb(site);
 
-  posx=lx/2;
-  posy=ly/2;
+  posx=25;
+  posy=25;
   site=2*(posx+lx*posy);
   knocka(site);
   site=2*(next_nbr(posx,posy,2,0));

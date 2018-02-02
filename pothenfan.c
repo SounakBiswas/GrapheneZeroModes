@@ -137,7 +137,6 @@ int potfan(){
     }
   }
   shuffle_unmatched();
-  printf("%d %d \n",i,freecol);
   assert(i==freecol);
   do{
     aug=potfan_phase(n_phase);
