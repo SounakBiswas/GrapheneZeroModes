@@ -112,7 +112,7 @@ int potfan(){
   lookahead=(int*)malloc(ncells*sizeof(int));
 
   matching=heur_mdm();
-  freecol=ncells-(int)(nc*ncells)-matching;
+  freecol=ncells-(int)(num_vacs)-matching;
   unmatched=(int*)malloc(freecol*sizeof(int));
   i=0;
   for(col=0;col<ncells;col++){

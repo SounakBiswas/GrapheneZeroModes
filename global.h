@@ -1,5 +1,5 @@
-#define LX 1000
-#define LY 1000
+#define LX 200
+#define LY 200
 #define NCELLS LX*LY
 #define NEDGES 5*NCELLS
 #define NSITES 2*NCELLS
@@ -9,6 +9,7 @@
 int lx,ly,ncells,nsites,nedges,nlinks;
 double nc;
 int neigh[2*NCELLS][3];
+int num_vacs;
 int dfs_success;
 int *rids;
 int *cids;

@@ -12,9 +12,9 @@ void main(){
   initialize();
   make_lattice();
   make_sparse();
-  //printf("free sites=%d\n",ncells-(int)(nc*ncells)-hkmm());
-  //printf("free sites=%d\n",ncells-(int)(nc*ncells)-bfs());
-  printf("free sites=%d\n",ncells-(int)(nc*ncells)-potfan());
+  //printf("free sites=%d\n",ncells-(int)(num_vacs)-hkmm());
+  printf("free sites=%d\n",ncells-(int)(num_vacs)-bfs());
+  //printf("free sites=%d\n",ncells-(int)(num_vacs)-potfan());
   free(cmatch);
   free(rmatch);
   free(rids);
