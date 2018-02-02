@@ -2,28 +2,28 @@ import matplotlib.pyplot as plt
 import csv
 import networkx as nx
 import numpy as np
-root3by2=0.5*(3**0.5)
+factor=(1.0+0.5*(3**0.5))
 G=nx.Graph()
-lx=40;
-ly=40;
+lx=100;
+ly=100;
 ctr=0;
 posx=0;
 posy=0;
 l=0.5
-lattice='brickwall'
 lattice='honeycomb'
+#lattice='brickwall'
 def nbr(x,y,i,j) :
   return (x+i)+(y+j)*lx
 for x in range (0,lx) :
   for y in range(0,ly) :
     cell=x+y*lx
-    posx=x-y/(2.0)
+    posx=(3**0.5)*(x-y/2.0)
     if(lattice=='brickwall') :
       posy=y*0.5
       G.add_node(2*cell,pos=(posx,posy))
       G.add_node(2*cell+1,pos=(posx,posy+0.5))
     if(lattice=='honeycomb') :
-      posy=(1.0+root3by2)*y
+      posy=(1.5)*y
       G.add_node(2*cell,pos=(posx,posy))
       G.add_node(2*cell+1,pos=(posx,posy+1))
 ctr=0;
@@ -58,7 +58,10 @@ nprime=G.nodes()
 nx.draw_networkx_nodes(G,pos,node_color='#3182bd',nodelist=free_sites,node_size=5,linewidths=0.2)
 nx.draw_networkx_nodes(G,pos,node_color='#f03b20',nodelist=vacancies,node_size=2,linewidths=0.2)
 nx.draw_networkx_edges(G,pos,width=0.2)
-plt.axis('off')
+#plt.axis('off')
 plt.axes().set_aspect('equal')
-plt.savefig("test.pdf",format='pdf')
-#plt.savefig("test.png",bbox_inches='tight' )
+fig=plt.gcf()
+fig.set_size_inches(30,30)
+#plt.savefig("test.pdf",format='pdf')
+fig.savefig("test.svg",format='svg' )
+#fig.savefig("test.png",dpi=300,bbox_inches='tight' )
