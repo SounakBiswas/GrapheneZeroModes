@@ -22,6 +22,19 @@ static inline void pop_stack(){
 static inline void clear_stack(){
   s_top=-1;
 }
+void shuffle_unmatched(){
+  int temp;
+  int k1,k2;
+  int i;
+  for(i=0;i<freecol;i++){
+    k1=rand()%freecol;
+    k2=rand()%freecol;
+    temp=unmatched[k1];
+    unmatched[k1]=unmatched[k2];
+    unmatched[k2]=temp;
+  }
+
+}
 
 
 void augment(int row){
@@ -111,7 +124,7 @@ int potfan(){
   visited=(int*)malloc(ncells*sizeof(int));
   lookahead=(int*)malloc(ncells*sizeof(int));
 
-  matching=heur_mdm();
+  //matching=heur_mdm();
   freecol=ncells-(int)(num_vacs)-matching;
   unmatched=(int*)malloc(freecol*sizeof(int));
   i=0;
@@ -123,6 +136,8 @@ int potfan(){
       i++;
     }
   }
+  shuffle_unmatched();
+  printf("%d %d \n",i,freecol);
   assert(i==freecol);
   do{
     aug=potfan_phase(n_phase);
