@@ -80,7 +80,6 @@ void make_sparse(){
   int i,j;
   for(i=0;i<NSITES;i++)
     ifvac[i]=0;
-  //int num_vacs=nc*ncells;
   num_vacs=6;
   n_nonzeros=3*ncells-6*num_vacs;
   int sitea,siteb;

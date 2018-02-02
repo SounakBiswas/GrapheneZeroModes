@@ -36,9 +36,6 @@ void main(){
   make_lattice();
   make_sparse();
   int i;
-  //printf("free sites=%d\n",ncells-(int)(num_vacs)-hkmm());
- // printf("free sites=%d\n",ncells-(int)(num_vacs)-bfs());
-  //printf("free sites=%d\n",ncells-(int)(num_vacs)-potfan());
   write_vacancies();
   for(i=0;i<100;i++){
     clear_match();
