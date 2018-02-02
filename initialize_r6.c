@@ -69,7 +69,7 @@ static inline void knockb(int siteb){
 
 void make_sparse(){
   int i,j;
-  int num_vacs;
+ // int num_vacs;
   for(i=0;i<NSITES;i++)
     ifvac[i]=0;
   //int num_vacs=nc*ncells;
@@ -105,11 +105,11 @@ void make_sparse(){
   knocka(site);
   site=2*(next_nbr(posx,posy,-2,0));
   knocka(site);
-  site=2*(next_nbr(posx,posy,0,2));
+  site=2*(next_nbr(posx,posy,0,-2));
   knocka(site);
-  site=2*(next_nbr(posx,posy,2,2));
+  site=2*(next_nbr(posx,posy,-2,-2));
   knocka(site);
-  site=2*(next_nbr(posx,posy,2,4));
+  site=2*(next_nbr(posx,posy,-2,-4));
   knocka(site);
 
 
