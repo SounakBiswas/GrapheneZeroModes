@@ -19,10 +19,9 @@ void initialize(){
 
 void make_sparse(){
   int i,j;
-  int ifvac[NSITES];
   for(i=0;i<NSITES;i++)
     ifvac[i]=0;
-  int num_vacs=nc*ncells;
+  num_vacs=nc*ncells;
   n_nonzeros=3*ncells-6*num_vacs;
   int sitea,siteb;
 
@@ -120,4 +119,32 @@ void make_sparse(){
   cptrs[ncells]=n_nonzeros;
   printf("initialized\n");
 
+}
+void transpose(){
+  int i;
+  int rid_ctr,c_ctr;
+  int j,sitea,siteb;
+  n_nonzeros=3*ncells-6*num_vacs;
+  for(i=0;i<ncells;i++){
+    cmatch[i]=rmatch[i]=-1;
+    if(ifvac[2*i+1]==1)
+      cmatch[i]=-2;   // -2 : impossible to match.
+    if(ifvac[2*i]==1)
+      rmatch[i]=-2;
+  }
+  rid_ctr=c_ctr=0;
+  for(i=0;i<ncells;i++){
+    cptrs[c_ctr]=rid_ctr;
+    c_ctr++;
+    if(ifvac[2*i+1]!=1){
+      for(j=0;j<3;j++){
+        sitea=neigh[2*i+1][j];
+        if(ifvac[sitea]!=1){
+          rids[rid_ctr]=sitea/2;
+          rid_ctr++;
+        }
+      }
+    }
+  }
+  cptrs[ncells]=n_nonzeros;
 }

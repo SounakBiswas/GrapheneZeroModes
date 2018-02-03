@@ -41,12 +41,20 @@ f=open("vacancies.dat","r");
 remove=f.read().splitlines();
 f.close();
 vacancies=map(int,remove)
-f=open("free_sites.dat","r");
-remove2=f.read().splitlines();
+f=open("free_sitesA.dat","r");
+remove=f.read().splitlines();
 f.close();
-free_sites=map(int,remove2)
+free_sitesA=map(int,remove)
+f=open("free_sitesB.dat","r");
+remove=f.read().splitlines();
+f.close();
+free_sitesB=map(int,remove)
+f=open("unmatched.dat","r");
+remove=f.read().splitlines();
+f.close();
+unmatched=map(int,remove)
 
-remove=vacancies+free_sites
+remove=vacancies+free_sitesA+free_sitesB
 
 for i in vacancies :
   G.remove_edges_from(G.edges(i))
@@ -55,8 +63,10 @@ pos=nx.get_node_attributes(G,'pos')
 nprime=G.nodes()
 
 #nx.draw_networkx_nodes(G,pos,node_color='#636363',nodelist=nprime,node_size=0,linewidths=0.2)
-nx.draw_networkx_nodes(G,pos,node_color='#3182bd',nodelist=free_sites,node_size=5,linewidths=0.2)
+nx.draw_networkx_nodes(G,pos,node_color='#3182bd',nodelist=free_sitesA,node_size=5,linewidths=0.2)
+nx.draw_networkx_nodes(G,pos,node_color='y',nodelist=free_sitesB,node_size=5,linewidths=0.2)
 nx.draw_networkx_nodes(G,pos,node_color='#f03b20',nodelist=vacancies,node_size=2,linewidths=0.2)
+#nx.draw_networkx_nodes(G,pos,node_color='y',nodelist=unmatched,node_size=16,linewidths=0.2)
 nx.draw_networkx_edges(G,pos,width=0.2)
 #plt.axis('off')
 plt.axes().set_aspect('equal')
