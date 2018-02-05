@@ -79,7 +79,7 @@ int bfs(){
     visited[col]=-1;
   int n_phase=0;
   int matching=0;
-  matching=heur_mdm();
+  //matching=heur_mdm();
   clear_queue();
   for(col=0;col<ncells;col++){
     if(cmatch[col]==-1)

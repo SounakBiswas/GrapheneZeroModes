@@ -42,7 +42,8 @@ int bfs_find_c(int col,int n_phase){
       row=rids[rctr];
       if(visited[row]<n_phase){
         visited[row]=n_phase;
-        enqueue(rmatch[row]);
+	if(rmatch[row]!=-1)
+          enqueue(rmatch[row]);
       }
     }
 
@@ -60,6 +61,7 @@ int bfs_find_r(int col,int n_phase){
       row=rids[rctr];
       if(visited[row]<n_phase){
         visited[row]=n_phase;
+	if(rmatch[row]!=-1)
         enqueue(rmatch[row]);
       }
     }
@@ -79,8 +81,9 @@ int calc_loc_c(){
   int matching=0;
   clear_queue();
   for(col=0;col<ncells;col++){
-    if(cmatch[col]==-1)
+    if(cmatch[col]==-1){
        bfs_find_c(col,n_phase);
+    }
     n_phase++;
   }
   free(queue);

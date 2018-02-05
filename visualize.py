@@ -68,7 +68,7 @@ nx.draw_networkx_nodes(G,pos,node_color='y',nodelist=free_sitesB,node_size=5,lin
 nx.draw_networkx_nodes(G,pos,node_color='#f03b20',nodelist=vacancies,node_size=2,linewidths=0.2)
 #nx.draw_networkx_nodes(G,pos,node_color='y',nodelist=unmatched,node_size=16,linewidths=0.2)
 nx.draw_networkx_edges(G,pos,width=0.2)
-#plt.axis('off')
+plt.axis('off')
 plt.axes().set_aspect('equal')
 fig=plt.gcf()
 fig.set_size_inches(30,30)

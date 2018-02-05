@@ -136,7 +136,7 @@ int potfan(){
       i++;
     }
   }
-  shuffle_unmatched();
+  //shuffle_unmatched();
   assert(i==freecol);
   do{
     aug=potfan_phase(n_phase);

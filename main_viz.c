@@ -34,6 +34,16 @@ void write_free(){
   }
   fclose(fp);
 }
+void write_edgelist(){
+  FILE *fp;
+  int i;
+  fp=fopen("edgelist.dat","w");
+  for(i=0;i<ncells;i+=1){
+    if(cmatch[i]>=0)
+      fprintf(fp,"%d %d\n",2*i,2*cmatch[i]+1);
+  }
+  fclose(fp);
+}
 void write_free_site(){
   FILE *fp;
   int i;
@@ -53,11 +63,15 @@ void main(){
   int i;
   int m1,m2;
   write_vacancies();
-  printf("free sites=%d\n",ncells-(int)(num_vacs)-potfan());
+  printf("free sites=%d\n",ncells-(int)(num_vacs)-bfs());
+  //printf("free sites=%d\n",ncells-(int)(num_vacs)-potfan());
   calc_loc_c();
   write_free_site();
+  write_edgelist();
+  //getchar();
   transpose();
-  printf("free sites=%d\n",ncells-(int)(num_vacs)-potfan());
+  printf("free sites=%d\n",ncells-(int)(num_vacs)-bfs());
+  //printf("free sites=%d\n",ncells-(int)(num_vacs)-potfan());
   calc_loc_r();
   write_free();
 //  for(i=0;i<100;i++){

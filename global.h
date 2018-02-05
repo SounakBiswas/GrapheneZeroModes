@@ -1,10 +1,10 @@
-#define LX 40
-#define LY 40
+#define LX 100
+#define LY 100
 #define NCELLS LX*LY
 #define NEDGES 5*NCELLS
 #define NSITES 2*NCELLS
 #define NLINKS 3*NCELLS
-#define NC 0.1
+#define NC 0.08
 
 int lx,ly,ncells,nsites,nedges,nlinks;
 double nc;

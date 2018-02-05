@@ -99,10 +99,22 @@ void make_sparse(){
   knockb(site);
   site=2*(next_nbr(posx,posy,0,2))+1;
   knockb(site);
-  site=2*(next_nbr(posx,posy,2,2))+1;
+  site=2*(next_nbr(posx,posy,3,2))+1;
   knockb(site);
   site=2*(next_nbr(posx,posy,2,4))+1;
   knockb(site);
+  //site=2*(posx+lx*posy)+1;
+  //knockb(site);
+  //site=2*(next_nbr(posx,posy,4,0))+1;
+  //knockb(site);
+  //site=2*(next_nbr(posx,posy,-4,0))+1;
+  //knockb(site);
+  //site=2*(next_nbr(posx,posy,0,4))+1;
+  //knockb(site);
+  //site=2*(next_nbr(posx,posy,4,4))+1;
+  //knockb(site);
+  //site=2*(next_nbr(posx,posy,4,8))+1;
+  //knockb(site);
 
   posx=25;
   posy=25;
