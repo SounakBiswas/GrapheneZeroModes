@@ -40,6 +40,7 @@ int bfs_find_c(int col,int n_phase){
     dequeue();
     for(rctr=cptrs[col]; rctr<cptrs[col+1]; rctr++){
       row=rids[rctr];
+      ifvac[2*row+1]=5;
       if(visited[row]<n_phase){
         visited[row]=n_phase;
 	if(rmatch[row]!=-1)
@@ -59,6 +60,7 @@ int bfs_find_r(int col,int n_phase){
     dequeue();
     for(rctr=cptrs[col]; rctr<cptrs[col+1]; rctr++){
       row=rids[rctr];
+      ifvac[2*row]=5;
       if(visited[row]<n_phase){
         visited[row]=n_phase;
 	if(rmatch[row]!=-1)

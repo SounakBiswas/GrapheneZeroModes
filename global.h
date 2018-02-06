@@ -8,8 +8,8 @@
 
 int lx,ly,ncells,nsites,nedges,nlinks;
 double nc;
-int neigh[2*NCELLS][3];
-int ifvac[2*NCELLS];
+int neigh[NSITES][3];
+int ifvac[NSITES];
 int num_vacs;
 int dfs_success;
 int *rids;

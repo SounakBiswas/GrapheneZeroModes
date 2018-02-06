@@ -10,6 +10,7 @@ ctr=0;
 posx=0;
 posy=0;
 l=0.5
+remove_edges=True
 lattice='honeycomb'
 #lattice='brickwall'
 def nbr(x,y,i,j) :
@@ -53,6 +54,10 @@ f=open("unmatched.dat","r");
 remove=f.read().splitlines();
 f.close();
 unmatched=map(int,remove)
+f=open("edgelist.dat","r");
+remove=f.read().splitlines();
+f.close();
+redges=[tuple(map(int,i.split())) for i in remove]
 
 remove=vacancies+free_sitesA+free_sitesB
 
@@ -60,7 +65,8 @@ for i in vacancies :
   G.remove_edges_from(G.edges(i))
 
 pos=nx.get_node_attributes(G,'pos')
-nprime=G.nodes()
+if(remove_edges==True):
+  G.remove_edges_from(redges)
 
 #nx.draw_networkx_nodes(G,pos,node_color='#636363',nodelist=nprime,node_size=0,linewidths=0.2)
 nx.draw_networkx_nodes(G,pos,node_color='#3182bd',nodelist=free_sitesA,node_size=5,linewidths=0.2)
@@ -68,6 +74,7 @@ nx.draw_networkx_nodes(G,pos,node_color='y',nodelist=free_sitesB,node_size=5,lin
 nx.draw_networkx_nodes(G,pos,node_color='#f03b20',nodelist=vacancies,node_size=2,linewidths=0.2)
 #nx.draw_networkx_nodes(G,pos,node_color='y',nodelist=unmatched,node_size=16,linewidths=0.2)
 nx.draw_networkx_edges(G,pos,width=0.2)
+#nx.draw_networkx_edges(G,pos,edgelist=redges,edge_color='r',width=0.2)
 plt.axis('off')
 plt.axes().set_aspect('equal')
 fig=plt.gcf()
