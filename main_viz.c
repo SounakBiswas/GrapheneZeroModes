@@ -74,7 +74,7 @@ void main(){
   calc_loc_c();
   //getchar();
   transpose();
-  printf("free sites=%d\n",ncells-(int)(num_vacs)-bfs());
+  printf("free sites=%d\n",ncells-(int)(num_vacs)-potfan());
   printf("free sites=%d\n",ncells-(int)(num_vacs)-potfan());
   calc_loc_r();
   write_free();

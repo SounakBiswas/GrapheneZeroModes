@@ -50,10 +50,6 @@ f=open("free_sitesB.dat","r");
 remove=f.read().splitlines();
 f.close();
 free_sitesB=map(int,remove)
-f=open("unmatched.dat","r");
-remove=f.read().splitlines();
-f.close();
-unmatched=map(int,remove)
 f=open("edgelist.dat","r");
 remove=f.read().splitlines();
 f.close();
