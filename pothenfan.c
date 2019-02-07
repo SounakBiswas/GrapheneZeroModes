@@ -12,14 +12,14 @@ int heur_mdm();
 int potfan_phase(int);
 int pf_dfs(int,int);
 int potfan();
-static inline void push_stack(int k){
+void push_stack(int k){
   s_top++;
   stack[s_top]=k;
 }
-static inline void pop_stack(){
+void pop_stack(){
   s_top--;
 }
-static inline void clear_stack(){
+void clear_stack(){
   s_top=-1;
 }
 void shuffle_unmatched(){

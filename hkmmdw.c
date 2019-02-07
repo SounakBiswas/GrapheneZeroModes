@@ -15,32 +15,32 @@ int queue_len;
 int heur_sgm();
 int heur_mdm();
 
-inline void push_stack(int k){
+void push_stack(int k){
   s_top++;
   stack[s_top]=k;
   lastrow[k]=cptrs[k]-1;
 }
-inline void pop_stack(){
+void pop_stack(){
   s_top--;
 }
-inline void clear_stack(){
+void clear_stack(){
   s_top=-1;
 }
 
-inline void enqueue(int k){
+void enqueue(int k){
   queue[tail]=k;
   tail=(tail!=0)?tail-1:ncells-1;
   queue_len++;
 }
-inline void dequeue(){
+void dequeue(){
   head=(head!=0)?head-1:ncells-1;
   queue_len--;
 }
-inline void clear_queue(){
+void clear_queue(){
   head=tail=ncells-1;
   queue_len=0;
 }
-inline int empty_queue(){
+int empty_queue(){
   return (queue_len==0);
 
 }

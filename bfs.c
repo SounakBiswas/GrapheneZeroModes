@@ -12,20 +12,20 @@ int heur_sgm();
 int heur_mdm();
 int bfs_phase();
 int bfs();
-static inline void enqueue(int k){
+void enqueue(int k){
   queue[tail]=k;
   tail=(tail!=0)?tail-1:ncells-1;
   queue_len++;
 }
-static inline void dequeue(){
+void dequeue(){
   head=(head!=0)?head-1:ncells-1;
   queue_len--;
 }
-static inline void clear_queue(){
+void clear_queue(){
   head=tail=ncells-1;
   queue_len=0;
 }
-static inline int empty_queue(){
+int empty_queue(){
   return (queue_len==0);
 
 }
