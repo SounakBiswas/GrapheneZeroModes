@@ -9,6 +9,9 @@ int potfan();
 int bfs();
 int hkmm();
 int calc_loc();
+int calc_loc_c();
+int calc_loc_r();
+void transpose();
 void write_vacancies(){
   FILE *fp;
   int i;
@@ -21,13 +24,13 @@ void write_vacancies(){
 void write_free(){
   FILE *fp;
   int i;
-  fp=fopen("free_sitesA.dat","a");
+  fp=fopen("free_sitesA.dat","w");
   for(i=0;i<2*ncells;i+=2){
     if(ifvac[i]==4)
       fprintf(fp,"%d\n",i);
   }
   fclose(fp);
-  fp=fopen("free_sitesB.dat","a");
+  fp=fopen("free_sitesB.dat","w");
   for(i=1;i<2*ncells;i+=2){
     if(ifvac[i]==4)
       fprintf(fp,"%d\n",i);
@@ -70,22 +73,13 @@ void main(){
   int m1,m2;
   write_vacancies();
   printf("free sites=%d\n",ncells-(int)(num_vacs)-bfs());
-  //printf("free sites=%d\n",ncells-(int)(num_vacs)-potfan());
   calc_loc_c();
-  //getchar();
   transpose();
-  printf("free sites=%d\n",ncells-(int)(num_vacs)-potfan());
-  printf("free sites=%d\n",ncells-(int)(num_vacs)-potfan());
+  printf("free sites=%d\n",ncells-(int)(num_vacs)-bfs());
   calc_loc_r();
   write_free();
+  write_free_site();
   write_edgelist();
-//  for(i=0;i<100;i++){
-//    clear_match();
-//    write_free();
-//  }
-  //clear_match();
-  //transpose();
-  //clear_match();
   free(cmatch);
   free(rmatch);
   free(rids);

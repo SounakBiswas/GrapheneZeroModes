@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <time.h>
 void make_lattice();
 void initialize();
 void make_sparse();
@@ -35,16 +36,14 @@ void main(){
   initialize();
   make_lattice();
   make_sparse();
+  clock_t start,end;
   int i;
   write_vacancies();
-  for(i=0;i<100;i++){
-    clear_match();
-    potfan();
-    write_free();
-  
-  }
-  clear_match();
-  printf("free sites=%d\n",ncells-(int)(num_vacs)-potfan());
+  start=clock();
+  printf("free sites=%d\n",ncells-(int)(num_vacs)-bfs());
+  end=clock();
+  printf("time taken: %lf",(double)(end-start)/(1.0*CLOCKS_PER_SEC));
+  write_free();
   free(cmatch);
   free(rmatch);
   free(rids);

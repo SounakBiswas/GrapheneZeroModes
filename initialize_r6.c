@@ -4,16 +4,6 @@
 #include "time.h"
 #include <stdlib.h>
 #define  next_nbr(ii,jj,xx,yy)  ((xx+ii+lx)%lx + ((yy+jj+ly)%ly)*lx)
-void clear_match(){
-  int i;
-  for(i=0;i<ncells;i++){
-    if(cmatch[i]!=-2)
-      cmatch[i]=-1;
-    if(rmatch[i]!=-2)
-      rmatch[i]=-1;
-  
-  }
-}
 void initialize(){
   lx=LX;
   ly=LY;
