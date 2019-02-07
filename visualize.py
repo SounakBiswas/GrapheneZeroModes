@@ -4,13 +4,13 @@ import networkx as nx
 import numpy as np
 factor=(1.0+0.5*(3**0.5))
 G=nx.Graph()
-lx=100;
-ly=100;
+lx=40;
+ly=40;
 ctr=0;
 posx=0;
 posy=0;
 l=0.5
-remove_edges=True
+remove_edges=False
 lattice='honeycomb'
 #lattice='brickwall'
 def nbr(x,y,i,j) :
@@ -74,7 +74,6 @@ nx.draw_networkx_edges(G,pos,width=0.2)
 plt.axis('off')
 plt.axes().set_aspect('equal')
 fig=plt.gcf()
-fig.set_size_inches(30,30)
 #plt.savefig("test.pdf",format='pdf')
 fig.savefig("test.svg",format='svg' )
 #fig.savefig("test.png",dpi=300,bbox_inches='tight' )
