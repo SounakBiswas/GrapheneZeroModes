@@ -10,20 +10,20 @@ int queue_len;
 
 int bfs_phase();
 int bfs();
-void enqueue(int k){
+static void enqueue(int k){
   queue[tail]=k;
   tail=(tail!=0)?tail-1:ncells-1;
   queue_len++;
 }
-void dequeue(){
+static void dequeue(){
   head=(head!=0)?head-1:ncells-1;
   queue_len--;
 }
-void clear_queue(){
+static void clear_queue(){
   head=tail=ncells-1;
   queue_len=0;
 }
-int empty_queue(){
+static int empty_queue(){
   return (queue_len==0);
 
 }
