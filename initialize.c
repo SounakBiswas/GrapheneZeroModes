@@ -11,18 +11,33 @@ void initialize(){
   nedges=NEDGES;
   nsites=NSITES;
   nc=NC;
-  srand(32);
+  n_realizations=NR;
+  num_vacs=nc*ncells;
+  n_nonzeros=3*ncells-6*num_vacs;
+  srand(SEED);
   int i,j;
+}
+void allocate_arrays(){
   cdegree=(int*)malloc(ncells*sizeof(int));
   rdegree=(int*)malloc(ncells*sizeof(int));
+  rids=(int *)malloc(n_nonzeros*sizeof(int));
+  cptrs=(int *)malloc((ncells+1)*sizeof(int));
+  rmatch=(int*)malloc(ncells*sizeof(int));
+  cmatch=(int*)malloc(ncells*sizeof(int));
+}
+void free_arrays(){
+  free(cmatch);
+  free(rmatch);
+  free(rids);
+  free(cptrs);
+  free(cdegree);
+  free(rdegree);
 }
 
 void make_sparse(){
   int i,j;
   for(i=0;i<NSITES;i++)
     ifvac[i]=0;
-  num_vacs=nc*ncells;
-  n_nonzeros=3*ncells-6*num_vacs;
   int sitea,siteb;
 
   for(i=0;i<ncells;i++){
@@ -87,11 +102,6 @@ void make_sparse(){
     else
       i--;
   }
-  // Make sparse structures
-  rids=(int *)malloc(n_nonzeros*sizeof(int));
-  cptrs=(int *)malloc((ncells+1)*sizeof(int));
-  rmatch=(int*)malloc(ncells*sizeof(int));
-  cmatch=(int*)malloc(ncells*sizeof(int));
 
   for(i=0;i<ncells;i++){
     cmatch[i]=rmatch[i]=-1;

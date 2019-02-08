@@ -1,14 +1,18 @@
 #include "global.h"
 #include <stdlib.h>
-#include <stdio.h>
+#include <stdio.h> 
 #include <assert.h>
 #include <time.h>
-void make_lattice();
+#include <math.h> 
+void make_lattice(); 
 void initialize();
 void make_sparse();
 int potfan();
 int bfs();
 int hkmm();
+int dfs();
+void allocate_arrays();
+void free_arrays();
 void write_vacancies(){
   FILE *fp;
   int i;
@@ -33,21 +37,31 @@ void write_free(){
   fclose(fp);
 }
 void main(){
+  double av_fs,av_fs2;
+  char fname[200];
+  sprintf(fname,"./outfiles/Lx%dnc%.3f.dat",LX,NC);
   initialize();
   make_lattice();
-  make_sparse();
   clock_t start,end;
   int i;
-  write_vacancies();
+  int temp;
+  FILE *fp;
   start=clock();
-  printf("free sites=%d\n",ncells-(int)(num_vacs)-bfs());
+  allocate_arrays();
+  for (i=0;i<n_realizations;i++){
+    make_sparse();
+    temp=ncells-(int)(num_vacs)-dfs();
+    av_fs+=temp;
+    av_fs2+=(temp*temp);
+    printf("%d\n",temp);
+  }
+  free_arrays();
   end=clock();
-  printf("time taken: %lf",(double)(end-start)/(1.0*CLOCKS_PER_SEC));
-  write_free();
-  free(cmatch);
-  free(rmatch);
-  free(rids);
-  free(cptrs);
-  free(cdegree);
-  free(rdegree);
+ printf("time taken: %lf\n",(double)(end-start)/(1.0*CLOCKS_PER_SEC));
+
+  av_fs2=av_fs2/(1.0*ncells*ncells*n_realizations);
+  av_fs=av_fs/(1.0*ncells*n_realizations);
+  fp=fopen(fname,"w");
+  fprintf(fp,"%d %.16f %.16f %.16f",lx,nc,av_fs,sqrt((av_fs2-av_fs*av_fs)/(1.0*n_realizations)));
+  fclose(fp);
 }

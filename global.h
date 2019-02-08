@@ -1,17 +1,19 @@
-#define LX 100
-#define LY 100
+#define LX 2700
+#define LY LX
 #define NCELLS LX*LY
 #define NEDGES 5*NCELLS
 #define NSITES 2*NCELLS
 #define NLINKS 3*NCELLS
-#define NC 0.08
-
+#define NC 0.04
+#define NR 1
+#define SEED 22891
 int lx,ly,ncells,nsites,nedges,nlinks;
 double nc;
 int neigh[NSITES][3];
 int ifvac[NSITES];
 int num_vacs;
 int dfs_success;
+int n_realizations;
 int *rids;
 int *cids;
 int *cptrs;
