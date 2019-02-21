@@ -8,6 +8,8 @@ int *visited;
 int *parent;
 int queue_len;
 
+int heur_sgm();
+int heur_mdm();
 int bfs_phase();
 int bfs();
 static void enqueue(int k){
@@ -91,6 +93,7 @@ int bfs(){
   int matching=0;
   int init_head;
   clear_queue();
+  //matching=heur_mdm();
   for(col=0;col<ncells;col++){
     if(cmatch[col]==-1){
       init_head=head;

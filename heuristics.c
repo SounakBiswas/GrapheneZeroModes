@@ -1,10 +1,8 @@
-#include <stdlib.h>
+#include <stdlib.h> 
 #include <stdio.h>
 #include "global.h"
 #include "assert.h"
 
-int heur_sgm();
-int heur_mdm();
 static inline void match(int col,int row){
   cmatch[col]=row;
   rmatch[row]=col;

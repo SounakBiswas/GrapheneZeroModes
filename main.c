@@ -50,7 +50,7 @@ void main(){
   allocate_arrays();
   for (i=0;i<n_realizations;i++){
     make_sparse();
-    temp=ncells-(int)(num_vacs)-dfs();
+    temp=ncells-(int)(num_vacs)-bfs();
     av_fs+=temp;
     av_fs2+=(temp*temp);
     printf("%d\n",temp);

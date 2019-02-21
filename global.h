@@ -1,12 +1,12 @@
-#define LX 2700
+#define LX 30
 #define LY LX
 #define NCELLS LX*LY
 #define NEDGES 5*NCELLS
 #define NSITES 2*NCELLS
 #define NLINKS 3*NCELLS
-#define NC 0.04
+#define NC 0.12
 #define NR 1
-#define SEED 22891
+#define SEED 2289
 int lx,ly,ncells,nsites,nedges,nlinks;
 double nc;
 int neigh[NSITES][3];

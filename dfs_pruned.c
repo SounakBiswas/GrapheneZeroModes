@@ -8,11 +8,11 @@ int s_end;
 int *visited;
 
 int dfs_phase();
-void dfs();
+int dfs();
+int heur_mdm();
 
 void augment(int row){
   int temp;
-  aug++;
   while(s_top>=0){
     temp=cmatch[stack[s_top]];
     cmatch[stack[s_top]]=row;
@@ -64,7 +64,7 @@ int dfs_phase(int col2,int n_phase){
   return dfs_succ;
 }
 
-void dfs(){
+int dfs(){
   int col,i;
   stack=(int*)malloc(ncells*sizeof(int));
   visited=(int*)malloc(ncells*sizeof(int));
@@ -72,15 +72,21 @@ void dfs(){
     visited[col]=-1;
 
   int n_phase=0;
+  int matching=0;
+  matching=heur_mdm();
 
   for(col=0;col<ncells;col++){
     s_top=-1;
     s_end=ncells;
     if(cmatch[col]==-1){
-      if(!dfs_phase(col,n_phase))
+      if(dfs_phase(col,n_phase))
+        matching++;
+      else{
         for(i=s_end;i<ncells;i++)
           visited[cmatch[stack[i]]]=ncells;
+      }
     }
     n_phase++;
   }
+  return matching;
 }
