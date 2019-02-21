@@ -4,6 +4,8 @@
 #include <assert.h>
 void make_lattice();
 void initialize();
+void allocate_arrays();
+void free_arrays();
 void make_sparse();
 int potfan();
 int bfs();
@@ -26,7 +28,7 @@ void write_free(){
   int i;
   fp=fopen("free_sitesA.dat","w");
   for(i=0;i<2*ncells;i+=2){
-    if(ifvac[i]==4)
+    if(ifvac[i]==6)
       fprintf(fp,"%d\n",i);
   }
   fclose(fp);
@@ -39,16 +41,26 @@ void write_free(){
 }
 void write_edgelist(){
   FILE *fp;
-  int i;
+  int i,j;
   fp=fopen("edgelist.dat","w");
-  for(i=0;i<2*ncells;i+=1){
+  for(j=0;j<ncells;j+=1){
+    i=2*j+1;
+    if(ifvac[i]==7){
+      if(ifvac[neigh[i][0]]!=6 && ifvac[neigh[i][0]]!=1)
+	fprintf(fp,"%d %d\n",i,neigh[i][0]);
+      if(ifvac[neigh[i][1]]!=6 && ifvac[neigh[i][1]]!=1)
+	fprintf(fp,"%d %d\n",i,neigh[i][1]);
+      if(ifvac[neigh[i][2]]!=6 && ifvac[neigh[i][2]]!=1)
+	fprintf(fp,"%d %d\n",i,neigh[i][2]);
+    }
+    i=2*j;
     if(ifvac[i]==5){
       if(ifvac[neigh[i][0]]!=4 && ifvac[neigh[i][0]]!=1)
-	fprintf(fp,"%d %d\n",i,neigh[i][0]);
+        fprintf(fp,"%d %d\n",i,neigh[i][0]);
       if(ifvac[neigh[i][1]]!=4 && ifvac[neigh[i][1]]!=1)
-	fprintf(fp,"%d %d\n",i,neigh[i][1]);
+        fprintf(fp,"%d %d\n",i,neigh[i][1]);
       if(ifvac[neigh[i][2]]!=4 && ifvac[neigh[i][2]]!=1)
-	fprintf(fp,"%d %d\n",i,neigh[i][2]);
+        fprintf(fp,"%d %d\n",i,neigh[i][2]);
     }
   }
   fclose(fp);
@@ -68,22 +80,18 @@ void write_free_site(){
 void main(){
   initialize();
   make_lattice();
-  make_sparse();
   int i;
   int m1,m2;
-  write_vacancies();
+  allocate_arrays();
+  make_sparse();
   printf("free sites=%d\n",ncells-(int)(num_vacs)-bfs());
   calc_loc_c();
   transpose();
   printf("free sites=%d\n",ncells-(int)(num_vacs)-bfs());
   calc_loc_r();
+  write_vacancies();
   write_free();
   write_free_site();
   write_edgelist();
-  free(cmatch);
-  free(rmatch);
-  free(rids);
-  free(cptrs);
-  free(cdegree);
-  free(rdegree);
+  free_arrays();
 }

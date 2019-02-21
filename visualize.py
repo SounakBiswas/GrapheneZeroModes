@@ -1,11 +1,13 @@
 import matplotlib.pyplot as plt
+import math
 import csv
 import networkx as nx
 import numpy as np
+import sys
 factor=(1.0+0.5*(3**0.5))
 G=nx.Graph()
-lx=40;
-ly=40;
+lx=30;
+ly=30;
 ctr=0;
 posx=0;
 posy=0;
@@ -54,8 +56,22 @@ f=open("edgelist.dat","r");
 remove=f.read().splitlines();
 f.close();
 redges=[tuple(map(int,i.split())) for i in remove]
+redgesn=[]
+pos=nx.get_node_attributes(G,'pos')
+print redges
+for i in range(len(redges)) :
+    p0=pos[redges[i][0]]
+    p1=pos[redges[i][1]]
+    #print p0,p1
+    #sys.stdin.read(1)
+    if math.sqrt((p0[0]-p1[0])**2+(p0[1]-p1[1])**2)<4.0 :
+        redgesn.append(redges[i])
+    else :
+        print redges[i]
+
 
 remove=vacancies+free_sitesA+free_sitesB
+#redgesn=redges
 
 for i in vacancies :
   G.remove_edges_from(G.edges(i))
@@ -65,15 +81,17 @@ if(remove_edges==True):
   G.remove_edges_from(redges)
 
 #nx.draw_networkx_nodes(G,pos,node_color='#636363',nodelist=nprime,node_size=0,linewidths=0.2)
-nx.draw_networkx_nodes(G,pos,node_color='#3182bd',nodelist=free_sitesA,node_size=5,linewidths=0.2)
-nx.draw_networkx_nodes(G,pos,node_color='y',nodelist=free_sitesB,node_size=5,linewidths=0.2)
-nx.draw_networkx_nodes(G,pos,node_color='#f03b20',nodelist=vacancies,node_size=2,linewidths=0.2)
+nx.draw_networkx_nodes(G,pos,node_color='#3182bd',nodelist=free_sitesA,node_size=8,linewidths=0.2)
+nx.draw_networkx_nodes(G,pos,node_color='y',nodelist=free_sitesB,node_size=8,linewidths=0.2)
+#nx.draw_networkx_nodes(G,pos,node_color='#f03b20',nodelist=vacancies,node_size=2,linewidths=0.2)
 #nx.draw_networkx_nodes(G,pos,node_color='y',nodelist=unmatched,node_size=16,linewidths=0.2)
 nx.draw_networkx_edges(G,pos,width=0.2)
+nx.draw_networkx_edges(G,pos,edgelist=redgesn,width=1.5)
 #nx.draw_networkx_edges(G,pos,edgelist=redges,edge_color='r',width=0.2)
 plt.axis('off')
 plt.axes().set_aspect('equal')
 fig=plt.gcf()
 #plt.savefig("test.pdf",format='pdf')
-fig.savefig("test.svg",format='svg' )
+fig.savefig("test.pdf",format='pdf' )
+#fig.savefig("test.svg",format='svg' )
 #fig.savefig("test.png",dpi=300,bbox_inches='tight' )
