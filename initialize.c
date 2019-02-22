@@ -36,6 +36,7 @@ void free_arrays(){
 
 void make_sparse(){
   int i,j;
+  int x,y;
   for(i=0;i<NSITES;i++)
     ifvac[i]=0;
   int sitea,siteb;
@@ -44,31 +45,41 @@ void make_sparse(){
     cdegree[i]=3;
     rdegree[i]=3;
   }
+  for (i=0;i<ly;i++){
+    cdegree[i*lx]=cdegree[(lx-1)+i*lx]=2;
+    rdegree[i*lx]=rdegree[(lx-1)+i*lx]=2;
+    ifvac[2*i*lx]=ifvac[2*i*lx+1]=-1;
+    ifvac[2*(i*lx+(lx-1))]=ifvac[2*(i*lx+(lx-1))]=-1;
+  }
 
   for(i=0;i<num_vacs;i++){
     sitea=(int)((rand()/(RAND_MAX+1.0))*ncells)*2;
     if(ifvac[sitea]==0){
-      //printf("%d\n",sitea);
+      x=(sitea/2)%lx;
+      y=(sitea/2)/lx;
       ifvac[sitea]=1;
       cdegree[sitea/2]=0;
-
       siteb=neigh[sitea][0];
       rdegree[siteb/2]--;
       ifvac[siteb]=-1;
       ifvac[neigh[siteb][1]]=-1;
       ifvac[neigh[siteb][2]]=-1;
 
-      siteb=neigh[sitea][1];
-      rdegree[siteb/2]--;
-      ifvac[siteb]=-1;
-      ifvac[neigh[siteb][0]]=-1;
-      ifvac[neigh[siteb][2]]=-1;
+      if(x!=(lx-1)){
+        siteb=neigh[sitea][1];
+        rdegree[siteb/2]--;
+        ifvac[siteb]=-1;
+        ifvac[neigh[siteb][0]]=-1;
+        ifvac[neigh[siteb][2]]=-1;
+      }
 
-      siteb=neigh[sitea][2];
-      rdegree[siteb/2]--;
-      ifvac[siteb]=-1;
-      ifvac[neigh[siteb][1]]=-1;
-      ifvac[neigh[siteb][0]]=-1;
+      if(x!=0){
+        siteb=neigh[sitea][2];
+        rdegree[siteb/2]--;
+        ifvac[siteb]=-1;
+        ifvac[neigh[siteb][1]]=-1;
+        ifvac[neigh[siteb][0]]=-1;
+      }
 
     }
     else
@@ -78,26 +89,32 @@ void make_sparse(){
     siteb=(int)((rand()/(RAND_MAX+1.0))*ncells)*2+1;
     if(ifvac[siteb]==0){
       //printf("%d\n",siteb);
-      ifvac[siteb]=1;
+      x=(sitea/2)%lx;
+      y=(sitea/2)/lx;
+        ifvac[siteb]=1;
       rdegree[siteb/2]=0;
-      
+
       sitea=neigh[siteb][0];
       cdegree[sitea/2]--;
       ifvac[sitea]=-1;
       ifvac[neigh[sitea][1]]=-1;
       ifvac[neigh[sitea][2]]=-1;
 
-      sitea=neigh[siteb][1];
-      cdegree[sitea/2]--;
-      ifvac[sitea]=-1;
-      ifvac[neigh[sitea][0]]=-1;
-      ifvac[neigh[sitea][2]]=-1;
+      if(x!=0){
+        sitea=neigh[siteb][1];
+        cdegree[sitea/2]--;
+        ifvac[sitea]=-1;
+        ifvac[neigh[sitea][0]]=-1;
+        ifvac[neigh[sitea][2]]=-1;
+      }
 
-      sitea=neigh[siteb][2];
-      cdegree[sitea/2]--;
-      ifvac[sitea]=-1;
-      ifvac[neigh[sitea][1]]=-1;
-      ifvac[neigh[sitea][0]]=-1;
+      if(x!=(lx-1)){
+        sitea=neigh[siteb][2];
+        cdegree[sitea/2]--;
+        ifvac[sitea]=-1;
+        ifvac[neigh[sitea][1]]=-1;
+        ifvac[neigh[sitea][0]]=-1;
+      }
     }
     else
       i--;
@@ -116,15 +133,30 @@ void make_sparse(){
   for(i=0;i<ncells;i++){
     cptrs[c_ctr]=rid_ctr;
     c_ctr++;
-    if(ifvac[2*i]!=1){
-      for(j=0;j<3;j++){
-        siteb=neigh[2*i][j];
+    x=(i)%lx;
+    y=(i)/lx;
+      if(ifvac[2*i]!=1){
+        siteb=neigh[2*i][0];
         if(ifvac[siteb]!=1){
           rids[rid_ctr]=siteb/2;
           rid_ctr++;
         }
+        if(x!=(lx-1)){
+          siteb=neigh[2*i][1];
+          if(ifvac[siteb]!=1){
+            rids[rid_ctr]=siteb/2;
+            rid_ctr++;
+          }
+        }
+        if(x!=0){
+          siteb=neigh[2*i][2];
+          if(ifvac[siteb]!=1){
+            rids[rid_ctr]=siteb/2;
+            rid_ctr++;
+          }
+        }
+
       }
-    }
   }
   cptrs[ncells]=n_nonzeros;
   printf("initialized\n");
@@ -133,6 +165,7 @@ void make_sparse(){
 void transpose(){
   int i;
   int rid_ctr,c_ctr;
+  int x,y;
   int j,sitea,siteb;
   n_nonzeros=3*ncells-6*num_vacs;
   for(i=0;i<ncells;i++){
@@ -147,8 +180,22 @@ void transpose(){
     cptrs[c_ctr]=rid_ctr;
     c_ctr++;
     if(ifvac[2*i+1]!=1){
-      for(j=0;j<3;j++){
-        sitea=neigh[2*i+1][j];
+      x=(i)%lx;
+      y=(i)/lx;
+        sitea=neigh[2*i+1][0];
+      if(ifvac[sitea]!=1){
+        rids[rid_ctr]=sitea/2;
+        rid_ctr++;
+      }
+      if(x!=0){
+        sitea=neigh[2*i+1][1];
+        if(ifvac[sitea]!=1){
+          rids[rid_ctr]=sitea/2;
+          rid_ctr++;
+        }
+      }
+      if(x!=(lx-1)){
+        sitea=neigh[2*i+1][1];
         if(ifvac[sitea]!=1){
           rids[rid_ctr]=sitea/2;
           rid_ctr++;
