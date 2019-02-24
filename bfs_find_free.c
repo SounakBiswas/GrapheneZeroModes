@@ -36,11 +36,11 @@ int bfs_find_c(int col,int n_phase){
   enqueue(col);
   while(!empty_queue()){
     col=queue[head];
-    ifvac[2*col]=4;
+    ifvac[2*col]=6;
     dequeue();
     for(rctr=cptrs[col]; rctr<cptrs[col+1]; rctr++){
       row=rids[rctr];
-      ifvac[2*row+1]=5;
+      ifvac[2*row+1]=7;
       if(visited[row]<n_phase){
         visited[row]=n_phase;
 	if(rmatch[row]!=-1)
