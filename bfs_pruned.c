@@ -31,13 +31,13 @@ static int empty_queue(){
 }
 void prune(int init_head){
   int i;
-  if(head<=init_head)
-    for(i=head+1;i<=init_head;i++)
+  if(head<init_head)
+    for(i=head+1;i<init_head;i++)
       visited[cmatch[queue[i]]]=ncells;
   else{
     for(i=head+1;i<ncells;i++)
       visited[cmatch[queue[i]]]=ncells;
-    for(i=0;i<=init_head;i++)
+    for(i=0;i<init_head;i++)
       visited[cmatch[queue[i]]]=ncells;
   }
 }
