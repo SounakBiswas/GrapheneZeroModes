@@ -104,5 +104,8 @@ int bfs(){
     }
     n_phase++;
   }
+  free(queue);
+  free(visited);
+  free(parent);
   return matching;
 }

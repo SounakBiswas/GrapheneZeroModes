@@ -38,6 +38,7 @@ void write_free(){
 }
 void main(){
   double av_fs,av_fs2;
+  av_fs=av_fs2=0;
   char fname[200];
   sprintf(fname,"./outfiles/Lx%dnc%.3f.dat",LX,NC);
   initialize();
