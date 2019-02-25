@@ -135,12 +135,16 @@ void transpose(){
   int rid_ctr,c_ctr;
   int j,sitea,siteb;
   n_nonzeros=3*ncells-6*num_vacs;
+  int temp;
   for(i=0;i<ncells;i++){
-    cmatch[i]=rmatch[i]=-1;
-    if(ifvac[2*i+1]==1)
-      cmatch[i]=-2;   // -2 : impossible to match.
-    if(ifvac[2*i]==1)
-      rmatch[i]=-2;
+    //cmatch[i]=rmatch[i]=-1;
+    //if(ifvac[2*i+1]==1)
+    //  cmatch[i]=-2;   // -2 : impossible to match.
+    //if(ifvac[2*i]==1)
+    //  rmatch[i]=-2;
+    temp=cmatch[i];
+    cmatch[i]=rmatch[i];
+    rmatch[i]=temp;
   }
   rid_ctr=c_ctr=0;
   for(i=0;i<ncells;i++){
