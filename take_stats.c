@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "global.h"
 #include "assert.h"
+#include "math.h"
 int take_stats(){
   int pocket[NSITES];
   int cluster[NSITES];
@@ -23,7 +24,10 @@ int take_stats(){
   int pck_counter,clust_counter,boundary_counter;
   int bflag;
   int testcsize=0;
+  int sumi=0;
   int num_clusts[3]={0,0,0};
+  int slat_imbalance;
+
   for(i=0;i<nsites;i++){
     if(   (ifvac[i]!=1) && (burn[i]==-1)){
       pck_counter=clust_counter=-1;
@@ -47,7 +51,8 @@ int take_stats(){
       pocket[pck_counter]=i;
       clust_counter++;
       burn[i]=n_clust;
-        int i1;
+      int i1;
+      slat_imbalance=0;
       while(pck_counter!=-1){
         site=pocket[pck_counter];
         pck_counter--;
@@ -55,6 +60,7 @@ int take_stats(){
         cell=site/2;
         x=cell%lx;
         bflag=0;
+        slat_imbalance+= (2*sublat-1);
         //getchar();
         if(ifvac[site]<=0){  //free clusters
           site2=neigh[site][0];
@@ -76,7 +82,6 @@ int take_stats(){
           }
           else 
             bflag= bflag||(ifvac[site2]!=1)&&(burn[site2]!=n_clust);
-        if(n_clust==5)
 
           site2=neigh[site][2];
           if( (ifvac[site2]<=0) &&(burn[site2]==-1)){
@@ -161,14 +166,15 @@ int take_stats(){
 
       }
       testcsize+= (clust_counter+1);
-      if(ctype!=0)
-      fprintf(statf,"%d %d %d %d\n",n_clust,ctype,clust_counter+1,boundary_counter+1);
+      //if(ctype!=0)
+      fprintf(statf,"%d %d %d %d %d\n",n_clust,ctype,clust_counter+1,boundary_counter+1,slat_imbalance);
       n_clust++;
+      sumi+=abs(slat_imbalance);
 
     }
   }
   printf("cluster counts :total %d,free %d, RA=%d, RB=%d\n",n_clust,num_clusts[0],num_clusts[1],num_clusts[2]);
-  printf("total sites %d %d lx=%d\n ",2*(ncells-num_vacs),testcsize,lx);
+  printf("total sites %d %d lx=%d simb %d\n ",2*(ncells-num_vacs),testcsize,lx,sumi);
   assert(2*(ncells-num_vacs)==testcsize);
   fclose(statf);
   return n_clust;
