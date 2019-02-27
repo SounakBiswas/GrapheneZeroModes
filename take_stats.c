@@ -161,12 +161,14 @@ int take_stats(){
 
       }
       testcsize+= (clust_counter+1);
+      if(ctype!=0)
+      fprintf(statf,"%d %d %d %d\n",n_clust,ctype,clust_counter+1,boundary_counter+1);
       n_clust++;
 
     }
   }
   printf("cluster counts :total %d,free %d, RA=%d, RB=%d\n",n_clust,num_clusts[0],num_clusts[1],num_clusts[2]);
-  printf("total sites %d %d\n",2*(ncells-num_vacs),testcsize);
+  printf("total sites %d %d lx=%d\n ",2*(ncells-num_vacs),testcsize,lx);
   assert(2*(ncells-num_vacs)==testcsize);
   fclose(statf);
   return n_clust;
