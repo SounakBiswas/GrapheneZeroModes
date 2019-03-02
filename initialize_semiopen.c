@@ -47,11 +47,8 @@ void make_sparse(){
     rdegree[i]=3;
   }
   for (y=0;y<ly;y++){
-    x=y/2+y%2;
-    cell1=y*lx+x;
-    x=(x-1+lx)%lx;
-    cell2=y*lx+x;
-    
+    cell1=y*lx;
+    cell2=y*lx+(lx-1);
     cdegree[cell1]=cdegree[cell2]=2;
     rdegree[cell1]=rdegree[cell2]=2;
     ifvac[2*cell1]=ifvac[2*cell1+1]=-1;
@@ -134,15 +131,15 @@ void make_sparse(){
     c_ctr++;
     x=(i)%lx;
     y=(i)/lx;
-    flagn1=(y%2==1)&&(x== ((lx-1+y/2+y%2)%lx));
-    flagn2=(y%2==0)&&(x==(y/2+y%2));
+    flagn1= (x==lx-1)&&(y%2==0);
+    flagn2= (x==0)&&(y%2==1);
     if(ifvac[2*i]!=1){
       siteb=neigh[2*i][0];
       if(ifvac[siteb]!=1){
         rids[rid_ctr]=siteb/2;
         rid_ctr++;
       }
-      if(!flagn1){
+      if(!flagn1 ){
       siteb=neigh[2*i][1];
       if(ifvac[siteb]!=1){
         rids[rid_ctr]=siteb/2;
@@ -191,9 +188,9 @@ void transpose(){
     if(ifvac[2*i+1]!=1){
       x=(i)%lx;
       y=(i)/lx;
+      flagn1= (x==0)&&(y%2==1);
+      flagn2= (x==lx-1)&&(y%2==0);
       sitea=neigh[2*i+1][0];
-    flagn2=(y%2==1)&&(x== ((lx-1+y/2+y%2)%lx));
-    flagn1=(y%2==0)&&(x==(y/2+y%2));
       if(ifvac[sitea]!=1){
         rids[rid_ctr]=sitea/2;
         rid_ctr++;
@@ -206,7 +203,7 @@ void transpose(){
       }
       }
 
-      if( !flagn2){
+      if(!flagn2){
         sitea=neigh[2*i+1][2];
         if(ifvac[sitea]!=1){
           rids[rid_ctr]=sitea/2;
