@@ -31,11 +31,13 @@ int take_stats(){
   int num_clusts[3]={0,0,0};
   int slat_imbalance;
   int num_percolating=0;
+  double rx,ry,r2,rgyr;
 
   for(i=0;i<nsites;i++){
     if(   (ifvac[i]!=1) && (burn[i]==-1)){
       pck_counter=clust_counter=-1;
       boundary_counter=-1;
+      r2=rx=ry=0;
       flaglb=flagrb=0;
       if(ifvac[i]<=0)
         ctype=0;
@@ -57,6 +59,7 @@ int take_stats(){
       clust_counter++;
       burn[i]=n_clust;
       int i1;
+      double posx,posy;
       slat_imbalance=0;
       while(pck_counter!=-1){
         site=pocket[pck_counter];
@@ -65,6 +68,11 @@ int take_stats(){
         cell=site/2;
         x=cell%lx;
         y=cell/lx;
+        posx=sqrt(3)*(x-(y%2)/2.0);
+        posy=1.5*y+(y%2);
+        rx+= posx;
+        ry+= posy;
+        r2+= (posx*posx+posy*posy);
         bflag=0;
         flaglb=flaglb||((x==0));
         flagrb=flagrb||(x==(lx-1));
@@ -177,11 +185,16 @@ int take_stats(){
       }
       testcsize+= (clust_counter+1);
       num_percolating+= flaglb&&flagrb;
+      rx=rx/(1.0+clust_counter);
+      ry=ry/(1.0+clust_counter);
+      r2=r2/(1.0+clust_counter);
+      rgyr=sqrt(r2-(rx*rx+ry*ry))
+
       //if(flaglb&&flagrb)
       //  printf("percolating; type: %d %d\n",ctype,n_clust);
       
       if(ctype!=0)
-      fprintf(statf,"%d %d %d %d %d\n",n_clust,ctype,clust_counter+1,boundary_counter+1,slat_imbalance);
+      fprintf(statf,"%d %d %d %d %d %f\n",n_clust,ctype,clust_counter+1,boundary_counter+1,slat_imbalance,rgyr);
       n_clust++;
       sumi+=abs(slat_imbalance);
 
