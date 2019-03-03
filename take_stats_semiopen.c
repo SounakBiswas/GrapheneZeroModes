@@ -4,7 +4,8 @@
 #include "assert.h"
 #include "math.h"
 int take_stats(){
-  int pocket[NSITES];
+  int *pocket;
+  pocket=(int*)malloc(nsites*sizeof(int));
   int i,site,site2,sublat,cell,x,y;
   int il;
   int flagn1,flagn2,flaglb,flagrb;
@@ -30,6 +31,7 @@ int take_stats(){
   int sumi=0;
   int num_clusts[3]={0,0,0};
   int slat_imbalance;
+  size_free=0;
   int num_percolating=0;
   double rx,ry,r2,rgyr;
 
@@ -184,17 +186,19 @@ int take_stats(){
 
       }
       testcsize+= (clust_counter+1);
-      num_percolating+= flaglb&&flagrb;
+      num_percolating+= (flaglb&&flagrb);
       rx=rx/(1.0+clust_counter);
       ry=ry/(1.0+clust_counter);
       r2=r2/(1.0+clust_counter);
-      rgyr=sqrt(r2-(rx*rx+ry*ry))
+      rgyr=sqrt(r2-(rx*rx+ry*ry));
 
       //if(flaglb&&flagrb)
       //  printf("percolating; type: %d %d\n",ctype,n_clust);
       
       if(ctype!=0)
-      fprintf(statf,"%d %d %d %d %d %f\n",n_clust,ctype,clust_counter+1,boundary_counter+1,slat_imbalance,rgyr);
+        fprintf(statf,"%d %d %d %d %d %f\n",n_clust,ctype,clust_counter+1,boundary_counter+1,slat_imbalance,rgyr);
+      else 
+        size_free+=(clust_counter+1.0);
       n_clust++;
       sumi+=abs(slat_imbalance);
 
@@ -207,5 +211,6 @@ int take_stats(){
   assert(2*(ncells-num_vacs)==testcsize);
   fclose(statf);
   fclose(percf);
+  free(pocket);
   return n_clust;
 }

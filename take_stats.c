@@ -4,14 +4,14 @@
 #include "assert.h"
 #include "math.h"
 int take_stats(){
-  int pocket[NSITES];
-  int i,site,site2,sublat,cell,x;
+  int *pocket;
+  pocket=(int*)malloc(nsites*sizeof(int));
+  int i,site,site2,sublat,cell,x,y;
   int il;
   char fname[200];
   sprintf(fname,"./outfiles/cstats_Lx%dnc%.3fSEED%d.dat",LX,NC,NUM);
   FILE *statf=fopen(fname,"a");
-  FILE *bf=fopen("boundaries","w");
-  
+
   il=0;
   for (il=0;il<nsites;il++){
     burn[il]=-1;
@@ -27,7 +27,8 @@ int take_stats(){
   int sumi=0;
   int num_clusts[3]={0,0,0};
   int slat_imbalance;
-  double r_gyr;
+  size_free=0.0;
+  double rgyr;
   double rx,ry,r2;
   int x0,y0;
   int xdiff,ydiff;
@@ -37,7 +38,6 @@ int take_stats(){
     if(   (ifvac[i]!=1) && (burn[i]==-1)){
       pck_counter=clust_counter=-1;
       boundary_counter=-1;
-      r_gyr=0.0;
       if(ifvac[i]<=0)
         ctype=0;
       else if(ifvac[i]==2){
@@ -68,14 +68,15 @@ int take_stats(){
         sublat=site%2;
         cell=site/2;
         x=cell%lx;
+        y=cell/lx;
         bflag=0;
         slat_imbalance+= (2*sublat-1);
         xdiff=((x-x0)<lx/2)?(x-x0):(lx-x+x0)%lx;
-        ydiff=((y-y0)<ly/2)?(y-y0):(ly-y+y0)%lx;
+        ydiff=((y-y0)<ly/2)?(y-y0):(ly-y+y0)%ly;
         posy=1.5*ydiff+(ydiff%2);
         posx=sqrt(3)*(xdiff-ydiff/2.0);
-        rx+=posx*posx;
-        ry+=posy*posy;
+        rx+=posx;
+        ry+=posy;
         r2+= posx*posx+posy*posy;
         //getchar();
         if(ifvac[site]<=0){  //free clusters
@@ -185,9 +186,11 @@ int take_stats(){
       rx=rx/(clust_counter+1.0);
       ry=ry/(clust_counter+1.0);
       r2=r2/(clust_counter+1.0);
-      rgyr=sqrt(r2-rx*rx+ry*ry)
+      rgyr=sqrt(r2-rx*rx-ry*ry);
       if(ctype!=0)
-      fprintf(statf,"%d %d %d %d %d %f\n",n_clust,ctype,clust_counter+1,boundary_counter+1,slat_imbalance,rgyr);
+        fprintf(statf,"%d %d %d %d %d %f\n",n_clust,ctype,clust_counter+1,boundary_counter+1,slat_imbalance,rgyr);
+      else
+        size_free+=(clust_counter+1.0);
       n_clust++;
       sumi+=abs(slat_imbalance);
 
@@ -197,5 +200,6 @@ int take_stats(){
   printf("total sites %d %d lx=%d simb %d\n ",2*(ncells-num_vacs),testcsize,lx,sumi);
   assert(2*(ncells-num_vacs)==testcsize);
   fclose(statf);
+  free(pocket);
   return n_clust;
 }
