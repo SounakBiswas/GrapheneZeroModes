@@ -3,6 +3,26 @@
 #include "global.h"
 #include "assert.h"
 #include "math.h"
+void getr(int x,int y,int sublat,int x0,int y0,int sublat0,double *rx,double *ry){
+  double minr=4.0*lx;
+  int i,j;
+  int signx=(x0>=x)-(x>=x0);
+  int signy=(y0>=y)-(y>=y0);
+  int xd[2]={x-x0,signx*lx+(x-x0)};
+  int yd[2]={y-y0,signy*ly+(y-y0)};
+  double xdis,ydis;
+  double r;
+  for(i=0;i<=2;i++)
+  for(j=0;j<=2;i++){
+     ydis=yd[j]*1.5 +sublat-sublat0;
+     xdis=sqrt(3)*(xd[i]-yd[j]/2.0);
+     r=(xdis*xdis+ydis*ydis);
+     if(r<minr){
+       *rx=xdis;
+       *ry=ydis;
+     }
+  }
+}
 int take_stats(){
   int *pocket;
   pocket=(int*)malloc(nsites*sizeof(int));
@@ -30,8 +50,7 @@ int take_stats(){
   size_free=0.0;
   double rgyr;
   double rx,ry,r2;
-  int x0,y0;
-  int xdiff,ydiff;
+  int x0,y0,sublat0;
   double posx,posy;
 
   for(i=0;i<nsites;i++){
@@ -57,11 +76,11 @@ int take_stats(){
       pocket[pck_counter]=i;
       clust_counter++;
       burn[i]=n_clust;
-      int i1;
       slat_imbalance=0;
       rx=ry=r2=0;
       x0=(i/2)%lx;
       y0=(i/2)/lx;
+      sublat0=i%2;
       while(pck_counter!=-1){
         site=pocket[pck_counter];
         pck_counter--;
@@ -71,14 +90,10 @@ int take_stats(){
         y=cell/lx;
         bflag=0;
         slat_imbalance+= (2*sublat-1);
-        xdiff=((x-x0)<lx/2)?(x-x0):(lx-x+x0)%lx;
-        ydiff=((y-y0)<ly/2)?(y-y0):(ly-y+y0)%ly;
-        posy=1.5*ydiff+(ydiff%2);
-        posx=sqrt(3)*(xdiff-ydiff/2.0);
+        getr(x,y,sublat,x0,y0,sublat0,&posx,&posy);
         rx+=posx;
         ry+=posy;
         r2+= posx*posx+posy*posy;
-        //getchar();
         if(ifvac[site]<=0){  //free clusters
           site2=neigh[site][0];
           if( (ifvac[site2]<=0) &&(burn[site2]==-1)){

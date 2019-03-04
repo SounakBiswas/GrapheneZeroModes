@@ -3,6 +3,28 @@
 #include "global.h"
 #include "assert.h"
 #include "math.h"
+void getr(int x,int y,int sublat,int x0,int y0,int sublat0,double *rx,double *ry){
+  double minr=4.0*lx;
+  int i,j;
+  *rx=0;
+  *ry=0;
+  int signx=(x0>=x)-(x>=x0);
+  int signy=(y0>=y)-(y>=y0);
+  int yd[2];
+  yd[0]=y-y0;
+  yd[1]=signy*ly+(y-y0);
+  double xdis,ydis;
+  double r;
+  for(j=0;j<=2;i++){
+     ydis=yd[j]*1.5 +sublat-sublat0;
+     xdis=sqrt(3)*(x-x0+(2*(y0%2)-1)*(abs(yd[j])%2)/2.0);
+     r=(xdis*xdis+ydis*ydis);
+     if(r<minr){
+       *rx=xdis;
+       *ry=ydis;
+     }
+  }
+}
 int take_stats(){
   int *pocket;
   pocket=(int*)malloc(nsites*sizeof(int));
@@ -34,12 +56,13 @@ int take_stats(){
   size_free=0;
   int num_percolating=0;
   double rx,ry,r2,rgyr;
+  int x0,y0,xdiff,ydiff,sublat0;
+  double posx,posy;
 
   for(i=0;i<nsites;i++){
     if(   (ifvac[i]!=1) && (burn[i]==-1)){
       pck_counter=clust_counter=-1;
       boundary_counter=-1;
-      r2=rx=ry=0;
       flaglb=flagrb=0;
       if(ifvac[i]<=0)
         ctype=0;
@@ -60,9 +83,11 @@ int take_stats(){
       pocket[pck_counter]=i;
       clust_counter++;
       burn[i]=n_clust;
-      int i1;
-      double posx,posy;
       slat_imbalance=0;
+      x0=(i/2)%lx;
+      y0=(i/2)/lx;
+      sublat0=i/2;
+      r2=rx=ry=0;
       while(pck_counter!=-1){
         site=pocket[pck_counter];
         pck_counter--;
@@ -70,8 +95,8 @@ int take_stats(){
         cell=site/2;
         x=cell%lx;
         y=cell/lx;
-        posx=sqrt(3)*(x-(y%2)/2.0);
-        posy=1.5*y+(y%2);
+        getr(x,y,sublat,x0,y0,sublat0,&posx,&posy);
+        //posx=posy=0;
         rx+= posx;
         ry+= posy;
         r2+= (posx*posx+posy*posy);
