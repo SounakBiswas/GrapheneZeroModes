@@ -15,9 +15,16 @@ void initialize(){
   num_vacs=nc*ncells;
   n_nonzeros=3*ncells-6*num_vacs;
   srand(SEED);
+  //burn=(int*)malloc(nsites*sizeof(int));
   int i,j;
 }
 void allocate_arrays(){
+  ifvac=(int*)malloc(nsites*sizeof(int));
+  burn=(int*)malloc(nsites*sizeof(int));
+  neigh=(int**)malloc(nsites*sizeof(int*));
+  int i;
+  for(i=0;i<nsites;i++)
+    neigh[i]=(int*)malloc(3*sizeof(int));
   cdegree=(int*)malloc(ncells*sizeof(int));
   rdegree=(int*)malloc(ncells*sizeof(int));
   rids=(int *)malloc(n_nonzeros*sizeof(int));
@@ -26,17 +33,23 @@ void allocate_arrays(){
   cmatch=(int*)malloc(ncells*sizeof(int));
 }
 void free_arrays(){
+  free(ifvac);
+  free(burn);
   free(cmatch);
   free(rmatch);
   free(rids);
   free(cptrs);
   free(cdegree);
   free(rdegree);
+  int i;
+  for(i=0;i<nsites;i++)
+    free(neigh[i]);
+  free(neigh);
 }
 
 void make_sparse(){
   int i,j;
-  for(i=0;i<NSITES;i++)
+  for(i=0;i<nsites;i++)
     ifvac[i]=0;
   int sitea,siteb;
 

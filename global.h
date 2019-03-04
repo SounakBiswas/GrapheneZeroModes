@@ -1,16 +1,20 @@
-#define LX 30
+#define LX 2000
 #define LY LX
 #define NCELLS LX*LY
 #define NEDGES 5*NCELLS
 #define NSITES 2*NCELLS
 #define NLINKS 3*NCELLS
-#define NC 0.12
-#define NR 1
-#define SEED 2289
+#define NC 0.05
+#define NR 20
+#define SEED 11
+#define NUM 1
 int lx,ly,ncells,nsites,nedges,nlinks;
 double nc;
-int neigh[NSITES][3];
-int ifvac[NSITES];
+int **neigh;
+int *ifvac;
+int *burn;
+int statlines[NR];
+//int *burn;
 int num_vacs;
 int dfs_success;
 int n_realizations;
@@ -25,3 +29,4 @@ int *cdegree;
 int *rdegree;
 int *unmatched;
 int freecol;
+double size_free;
