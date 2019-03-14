@@ -14,6 +14,7 @@ void initialize(){
   n_realizations=NR;
   num_vacs=nc*ncells;
   n_nonzeros=3*ncells-6*num_vacs;
+  maxlen=3.0*(lx-1.0)*(lx-1.0);
   srand(SEED);
   //burn=(int*)malloc(nsites*sizeof(int));
   int i,j;

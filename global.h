@@ -1,10 +1,10 @@
-#define LX 2000
+#define LX 500
 #define LY LX
 #define NCELLS LX*LY
 #define NEDGES 5*NCELLS
 #define NSITES 2*NCELLS
 #define NLINKS 3*NCELLS
-#define NC 0.05
+#define NC 0.08
 #define NR 20
 #define SEED 11
 #define NUM 1
@@ -14,7 +14,7 @@ int **neigh;
 int *ifvac;
 int *burn;
 int statlines[NR];
-//int *burn;
+double maxlen;
 int num_vacs;
 int dfs_success;
 int n_realizations;

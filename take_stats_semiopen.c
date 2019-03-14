@@ -3,11 +3,9 @@
 #include "global.h"
 #include "assert.h"
 #include "math.h"
-void getr(int x,int y,int sublat,int x0,int y0,int sublat0,double *rx,double *ry){
-  double minr=4.0*lx;
+void getr_elaborate(int x,int y,int sublat,int x0,int y0,int sublat0,double *rx,double *ry){
+  double minr=3.0*maxlen;
   int i,j;
-  *rx=0;
-  *ry=0;
   int signx=(x0>=x)-(x>=x0);
   int signy=(y0>=y)-(y>=y0);
   int yd[2];
@@ -15,13 +13,14 @@ void getr(int x,int y,int sublat,int x0,int y0,int sublat0,double *rx,double *ry
   yd[1]=signy*ly+(y-y0);
   double xdis,ydis;
   double r;
-  for(j=0;j<=2;i++){
+  for(j=0;j<2;j++){
      ydis=yd[j]*1.5 +sublat-sublat0;
      xdis=sqrt(3)*(x-x0+(2*(y0%2)-1)*(abs(yd[j])%2)/2.0);
      r=(xdis*xdis+ydis*ydis);
      if(r<minr){
-       *rx=xdis;
-       *ry=ydis;
+       (*rx)=xdis;
+       (*ry)=ydis;
+       minr=r;
      }
   }
 }
@@ -57,7 +56,7 @@ int take_stats(){
   int num_percolating=0;
   double rx,ry,r2,rgyr;
   int x0,y0,xdiff,ydiff,sublat0;
-  double posx,posy;
+  double dposx,dposy;
 
   for(i=0;i<nsites;i++){
     if(   (ifvac[i]!=1) && (burn[i]==-1)){
@@ -86,7 +85,7 @@ int take_stats(){
       slat_imbalance=0;
       x0=(i/2)%lx;
       y0=(i/2)/lx;
-      sublat0=i/2;
+      sublat0=i%2;
       r2=rx=ry=0;
       while(pck_counter!=-1){
         site=pocket[pck_counter];
@@ -95,18 +94,16 @@ int take_stats(){
         cell=site/2;
         x=cell%lx;
         y=cell/lx;
-        getr(x,y,sublat,x0,y0,sublat0,&posx,&posy);
-        //posx=posy=0;
-        rx+= posx;
-        ry+= posy;
-        r2+= (posx*posx+posy*posy);
+        getr_elaborate(x,y,sublat,x0,y0,sublat0,&dposx,&dposy);
+        rx+= dposx;
+        ry+= dposy;
+        r2+= (dposx*dposx+dposy*dposy);
         bflag=0;
         flaglb=flaglb||((x==0));
         flagrb=flagrb||(x==(lx-1));
         flagn1=((sublat==0)&&(x==lx-1)&&(y%2==0)) || ((sublat==1)&&(x==0)&&(y%2==1));
         flagn2=((sublat==0)&&(x==0)&&(y%2==1)) || ((sublat==1)&&(x==lx-1)&&(y%2==0));
         slat_imbalance+= (2*sublat-1);
-        //getchar();
         if(ifvac[site]<=0){  //free clusters
           site2=neigh[site][0];
           if( (ifvac[site2]<=0) &&(burn[site2]==-1)){
@@ -215,7 +212,7 @@ int take_stats(){
       rx=rx/(1.0+clust_counter);
       ry=ry/(1.0+clust_counter);
       r2=r2/(1.0+clust_counter);
-      rgyr=sqrt(r2-(rx*rx+ry*ry));
+      rgyr=sqrt((r2-(rx*rx+ry*ry))/3.0);
 
       //if(flaglb&&flagrb)
       //  printf("percolating; type: %d %d\n",ctype,n_clust);

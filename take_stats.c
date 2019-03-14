@@ -3,8 +3,8 @@
 #include "global.h"
 #include "assert.h"
 #include "math.h"
-void getr(int x,int y,int sublat,int x0,int y0,int sublat0,double *rx,double *ry){
-  double minr=4.0*lx;
+void getr_elaborate(int x,int y,int sublat,int x0,int y0,int sublat0,double *rx,double *ry){
+  double minr=3.0*maxlen;
   int i,j;
   int signx=(x0>=x)-(x>=x0);
   int signy=(y0>=y)-(y>=y0);
@@ -12,16 +12,37 @@ void getr(int x,int y,int sublat,int x0,int y0,int sublat0,double *rx,double *ry
   int yd[2]={y-y0,signy*ly+(y-y0)};
   double xdis,ydis;
   double r;
-  for(i=0;i<=2;i++)
-  for(j=0;j<=2;i++){
+  for(i=0;i<2;i++)
+  for(j=0;j<2;j++){
      ydis=yd[j]*1.5 +sublat-sublat0;
      xdis=sqrt(3)*(xd[i]-yd[j]/2.0);
      r=(xdis*xdis+ydis*ydis);
      if(r<minr){
+       minr=r;
        *rx=xdis;
        *ry=ydis;
      }
   }
+}
+double getr2(int x,int y,int x0,int y0,int *rx,int *ry,double *r2){
+  double minr2=maxlen;
+  int i,j;
+  int signx=(x0>=x)-(x>=x0);
+  int signy=(y0>=y)-(y>=y0);
+  int xd[2]={x-x0,signx*lx+(x-x0)};
+  int yd[2]={y-y0,signy*ly+(y-y0)};
+  double tempr2;
+  for(i=0;i<2;i++)
+  for(j=0;j<2;j++){
+     tempr2=xd[i]*xd[i]+yd[j]*yd[j]-xd[i]*yd[j];
+     if(tempr2<minr2){
+       minr2=tempr2;
+       *rx=xd[i];
+       *ry=yd[j];
+     } 
+     
+  }
+  *r2=minr2;
 }
 int take_stats(){
   int *pocket;
@@ -51,7 +72,9 @@ int take_stats(){
   double rgyr;
   double rx,ry,r2;
   int x0,y0,sublat0;
-  double posx,posy;
+  int posx,posy;
+  double dposx,dposy;
+  double tempr2;
 
   for(i=0;i<nsites;i++){
     if(   (ifvac[i]!=1) && (burn[i]==-1)){
@@ -90,10 +113,14 @@ int take_stats(){
         y=cell/lx;
         bflag=0;
         slat_imbalance+= (2*sublat-1);
-        getr(x,y,sublat,x0,y0,sublat0,&posx,&posy);
-        rx+=posx;
-        ry+=posy;
-        r2+= posx*posx+posy*posy;
+        //getr2(x,y,x0,y0,&posx,&posy,&tempr2);
+        //r2+=tempr2; 
+        //rx+=posx;
+        //ry+=posy;
+        getr_elaborate(x,y,sublat,x0,y0,sublat0,&dposx,&dposy);
+        rx+= dposx;
+        ry+= dposy;
+        r2+= (dposx*dposx+dposy*dposy);
         if(ifvac[site]<=0){  //free clusters
           site2=neigh[site][0];
           if( (ifvac[site2]<=0) &&(burn[site2]==-1)){
@@ -141,7 +168,6 @@ int take_stats(){
           site2=neigh[site][1];
           if((ifvac[site2]==3) &&(burn[site2]==-1)){
             pck_counter++;
-            //printf("padd\n");
             pocket[pck_counter]=site2;
             clust_counter++;
             burn[site2]=n_clust;
@@ -152,7 +178,6 @@ int take_stats(){
           site2=neigh[site][2];
           if( (ifvac[site2]==3) &&(burn[site2]==-1)){
             pck_counter++;
-            //printf("padd\n");
             pocket[pck_counter]=site2;
             clust_counter++;
             burn[site2]=n_clust;
@@ -201,7 +226,8 @@ int take_stats(){
       rx=rx/(clust_counter+1.0);
       ry=ry/(clust_counter+1.0);
       r2=r2/(clust_counter+1.0);
-      rgyr=sqrt(r2-rx*rx-ry*ry);
+      //rgyr=sqrt(r2-rx*rx-ry*ry+rx*ry);
+      rgyr=sqrt((r2-rx*rx-ry*ry)/3.0);
       if(ctype!=0)
         fprintf(statf,"%d %d %d %d %d %f\n",n_clust,ctype,clust_counter+1,boundary_counter+1,slat_imbalance,rgyr);
       else
