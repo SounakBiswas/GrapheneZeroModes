@@ -3,6 +3,7 @@
 #include "global.h"
 #include "assert.h"
 #include "math.h"
+void histogram_freestats(double, double, double);
 void getr_elaborate(int x,int y,int sublat,int x0,int y0,int sublat0,double *rx,double *ry){
   double minr=3.0*maxlen;
   int i,j;
@@ -50,8 +51,11 @@ int take_stats(){
   int i,site,site2,sublat,cell,x,y;
   int il;
   char fname[200];
+  char fname2[200];
   sprintf(fname,"./outfiles/cstats_Lx%dnc%.3fSEED%d.dat",LX,NC,NUM);
+  sprintf(fname2,"./outfiles/ccounts_L%dnc%.3fSEED%d.dat",LX,NC,NUM);
   FILE *statf=fopen(fname,"a");
+  FILE *countf=fopen(fname2,"a");
 
   il=0;
   for (il=0;il<nsites;il++){
@@ -230,14 +234,18 @@ int take_stats(){
       rgyr=sqrt((r2-rx*rx-ry*ry)/3.0);
       if(ctype!=0)
         fprintf(statf,"%d %d %d %d %d %f\n",n_clust,ctype,clust_counter+1,boundary_counter+1,slat_imbalance,rgyr);
-      else
+      else{
         size_free+=(clust_counter+1.0);
+        histogram_freestats(clust_counter+1.0,boundary_counter+1.0,rgyr);
+      }
       n_clust++;
       sumi+=abs(slat_imbalance);
 
     }
   }
+  totfree+=num_clusts[0];
   printf("cluster counts :total %d,free %d, RA=%d, RB=%d\n",n_clust,num_clusts[0],num_clusts[1],num_clusts[2]);
+  fprintf(countf,"%d %d %d %d\n",n_clust,num_clusts[0],num_clusts[1],num_clusts[2]);
   printf("total sites %d %d lx=%d simb %d\n ",2*(ncells-num_vacs),testcsize,lx,sumi);
   assert(2*(ncells-num_vacs)==testcsize);
   fclose(statf);
